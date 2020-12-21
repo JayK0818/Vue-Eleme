@@ -2,7 +2,6 @@
   <div id="app">
 		hello world
 		<a-button type="primary">hello</a-button>
-		<a-icon type="step-backward" />
   </div>
 </template>
 
