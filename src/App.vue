@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-		hello world
-		<a-button type="primary">hello</a-button>
+		<top-nav/>
+		<div class="content">
+			<router-view/>
+		</div>
   </div>
 </template>
 
 <script>
-	import {Button} from 'ant-design-vue';
+	import TopNav from '@/components/top-nav'
 	export default {
 		name:"app",
 		created(){
@@ -18,11 +20,18 @@
 			})
 		},
 		components:{
-			[Button.name]:Button
+			TopNav,
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	
+	#app{
+		display:flex;
+		flex-direction:column;
+		height:100%;
+		.content{
+			flex:1;
+		}
+	}
 </style>

@@ -65,6 +65,6 @@ configureWebpack:{
 	]
 }
 ```
-![webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
-![how to optimize-momentjs-with-webpack](https://github.com/jmblog/how-to-optimize-momentjs-with-webpack)
+[webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
+[how to optimize-momentjs-with-webpack](https://github.com/jmblog/how-to-optimize-momentjs-with-webpack)
 	
