@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+		<v-header :seller="seller"/>
 		<top-nav/>
 		<div class="content">
 			<router-view/>
@@ -8,19 +9,32 @@
 </template>
 
 <script>
-	import TopNav from '@/components/top-nav'
+	import nav from '@/components/top-nav'
+	import header from '@/components/header'
 	export default {
 		name:"app",
+		data() {
+			return {
+				seller:{}
+			}
+		},
 		created(){
-			this.axios({
-				url:'/api/goods',
-				method:'get',
-			}).then(response => {
-				console.log(response);
-			})
+			this.get_seller()
 		},
 		components:{
-			TopNav,
+			'top-nav':nav,
+			'v-header':header
+		},
+		methods:{
+			get_seller(){
+				this.axios({
+					url:'/api/seller',
+					method:'get'
+				}).then(response => {
+					this.seller = response;
+					console.log(response);
+				})
+			}
 		}
 	}
 </script>
