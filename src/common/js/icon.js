@@ -1,1 +1,1 @@
-export {default as StepBackward} from '@ant-design/icons/lib/outline/StepBackwardOutline'
+export {default as Right} from '@ant-design/icons/lib/outline/RightOutline'

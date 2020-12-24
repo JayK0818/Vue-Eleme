@@ -17,10 +17,15 @@
 					<div class="discount-icon">减</div>
 					<span>{{seller['supports'][0]['description']}}</span>
 				</div>
+				<div class="discount-count">
+					<span v-if="seller['supports']">{{seller['supports'].length}}个</span><a-icon class="iconfont" type="right"></a-icon>
+				</div>
 			</div>
 		</div>
-		<div class="bulletion-wrapper">
-			
+		<div class="bulletin-wrapper">
+			<div class="bulletin-icon">公告</div>
+			<p class="bulletin-text">{{seller['bulletin']}}</p>
+			<a-icon type='right' class='right-icon'></a-icon>
 		</div>
 		<div class="seller-bg"><img :src="seller['avatar']" width="100%"></div>
 	</div>
@@ -29,11 +34,6 @@
 <script>
 	export default {
 		name:'v-header',
-		data() {
-			return {
-				
-			}
-		},
 		props:{
 			seller:{
 				type:Object,
@@ -59,11 +59,39 @@
 			filter:blur(10px);
 		}
 		.content-wrapper{
+			position:relative;
 			display:flex;
 			padding:24px 0 18px 24px;
 		}
-		.bulletion-wrapper{
+		.bulletin-wrapper{
+			display:flex;
 			padding:0 12px;
+			height:28px;
+			background-color:rgba(7,17,27,.2);
+			align-items:center;
+			.bulletin-text{
+				flex:1;
+				padding-left:6px;
+				font-size:10px;
+				line-height:28px;
+				overflow:hidden;
+				white-space:nowrap;
+				text-overflow:ellipsis;
+			}
+			.right-icon{
+				font-size:12px;
+			}
+			.bulletin-icon{
+				width:26px;
+				height:12px;
+				text-align:center;
+				line-height:12px;
+				background-color:#ffffff;
+				color:#000000;
+				font-weight:bold;
+				font-size:10px;
+				border-radius:2px;
+			}
 		}
 		.seller-info{
 			padding-left:16px;
@@ -84,6 +112,7 @@
 				padding-left:6px;
 				font-size:16px;
 				font-weight:bold;
+				color:#ffffff;
 			}
 			.delivery{
 				padding-top:8px;
@@ -110,6 +139,19 @@
 					line-height:16px;
 					padding-left:4px;
 				}
+			}
+		}
+		.discount-count{
+			position:absolute;
+			right:12px;
+			bottom:10px;
+			font-size:10px;
+			padding:8px;
+			background-color:rgba(0,0,0,.2);
+			border-radius:12px;
+			.iconfont{
+				padding-left:3px;
+				font-size:12px;
 			}
 		}
 	}
