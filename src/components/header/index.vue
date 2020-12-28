@@ -17,7 +17,7 @@
 					<div class="discount-icon">减</div>
 					<span>{{seller['supports'][0]['description']}}</span>
 				</div>
-				<div class="discount-count">
+				<div class="discount-count" @click.stop="show_masker">
 					<span v-if="seller['supports']">{{seller['supports'].length}}个</span><a-icon class="iconfont" type="right"></a-icon>
 				</div>
 			</div>
@@ -32,12 +32,18 @@
 </template>
 
 <script>
+	import {masker} from '@/components/header-mask/index.js';
 	export default {
 		name:'v-header',
 		props:{
 			seller:{
 				type:Object,
-				required:true
+				default:function(){return {}}
+			}
+		},
+		methods:{
+			show_masker(){
+				masker(this.seller);
 			}
 		}
 	}
@@ -49,6 +55,13 @@
 		color:#ffffff;
 		overflow:hidden;
 		background-color:rgba(7,17,27,.5);
+		.avatar{
+			width:64px;
+			height:64px;
+			img{
+				border-radius:4px;
+			}
+		}
 		.seller-bg{
 			position:absolute;
 			left:0;
