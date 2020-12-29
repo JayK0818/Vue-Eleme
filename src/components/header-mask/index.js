@@ -13,7 +13,10 @@ export const masker = (function(Vue){
 		})
 		document.body.appendChild(instance.$el);
 		instance.$on('close',function(){
-			document.body.removeChild(instance.$el);
+			instance.visible = false;
+		})
+		instance.$on("leave",() => {
+			document.body.removeChild(instance.$el)
 		})
 	}
 })(Vue)
