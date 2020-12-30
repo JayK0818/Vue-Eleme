@@ -7,6 +7,20 @@
 					<star :size="48" :score="seller['foodScore']"/>
 				</div>
 				<div class="dicount-info"><span class="text">优惠信息</span></div>
+				<div class="discount-details">
+					<ul class="discount-list">
+						<li v-for="(discount,index) in seller['supports']" :key="'discount-'+index" class='discount-item'>
+							<span class="discount-icon" :class='class_map[ discount["type"] ]'></span>
+							<span class="text">{{discount['description']}}</span>
+						</li>
+					</ul>
+				</div>
+				<div class="seller-bulletin">
+					<div class="bulletin-title">
+						<span class='text'>商家公告</span>
+					</div>
+					<div class="bulletin-text">{{seller['bulletin']}}</div>
+				</div>
 			</div>
 			<div class="footer-wrapper">
 				<span class="close-button" @click.stop="close">X</span>
@@ -25,6 +39,9 @@
 			}
 		},
 		components:{star},
+		created(){
+			this.class_map = ['decrease','discount','special','invoice','guarantee'];
+		},
 		methods:{
 			close(){
 				this.$emit("close")
@@ -37,6 +54,7 @@
 </script>
 
 <style lang="scss" scoped>
+	@import '../../common/css/mixin.scss';
 	.header-mask{
 		display:flex;
 		flex-direction:column;
@@ -48,6 +66,7 @@
 		background-color:rgba(7,17,27,.8);
 		overflow:hidden;
 		.content{
+			padding:0 36px;
 			flex:1;
 			overflow:auto;
 			color:#ffffff;
@@ -64,10 +83,10 @@
 				height:24px;
 				line-height:24px;
 			}
-			.dicount-info{
+			.dicount-info,.bulletin-title{
 				display:flex;
 				align-items:center;
-				padding:28px 36px 24px 36px;
+				padding:28px 0 24px;
 				font-weight:bold;
 				font-size:14px;
 				.text{
@@ -80,13 +99,54 @@
 					height:1px;
 				}
 			}
+			.discount-item{
+				display:flex;
+				align-items:center;
+				padding-left:12px;
+				margin-top:12px;
+				font-size:12px;
+				&:first-child{
+					margin-top:0;
+				}
+				.text{
+					padding-left:6px;
+					line-height:12px;
+				}
+			}
+			.discount-icon{
+				width:16px;
+				height:16px;
+				background-size:16px 16px;
+				&.decrease{
+					@include bg-image("./images/decrease_1");
+				}
+				&.discount{
+					@include bg-image("./images/discount_1");
+				}
+				&.special{
+					@include bg-image("./images/special_1");
+				}
+				&.invoice{
+					@include bg-image("./images/invoice_1");
+				}
+				&.guarantee{
+					@include bg-image("./images/guarantee_1");
+				}
+			}
+			.seller-bulletin{
+				.bulletin-text{
+					padding:0 12px ;
+					font-size:12px;
+					line-height:24px;
+				}
+			}
 		}
 		.footer-wrapper{
 			text-align:center;
 			padding:12px 0;
 		}
 		.close-button{
-			font-size:24px;
+			font-size:20px;
 			color:#ffffff;
 		}
 	}
