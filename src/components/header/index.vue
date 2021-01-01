@@ -6,7 +6,7 @@
 			</div>
 			<div class="seller-info">
 				<div class="name">
-					<span class="brand">品牌</span>
+					<span class="brand"></span>
 					<h2 class="seller-name">{{seller['name']}}</h2>
 				</div>
 				<p class="delivery">
@@ -14,7 +14,7 @@
 					<span class='time'>{{seller['deliveryTime']}}分钟送达</span>
 				</p>
 				<div class="discount" v-if="seller['supports']">
-					<div class="discount-icon">减</div>
+					<div class="discount-icon"></div>
 					<span>{{seller['supports'][0]['description']}}</span>
 				</div>
 				<div class="discount-count" @click.stop="show_masker">
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div class="bulletin-wrapper">
-			<div class="bulletin-icon">公告</div>
+			<div class="bulletin-icon"></div>
 			<p class="bulletin-text">{{seller['bulletin']}}</p>
 			<a-icon type='right' class='right-icon'></a-icon>
 		</div>
@@ -50,6 +50,7 @@
 </script>
 
 <style lang="scss" scoped>
+	@import '../../common/css/mixin.scss';
 	.header{
 		position:relative;
 		color:#ffffff;
@@ -95,15 +96,10 @@
 				font-size:12px;
 			}
 			.bulletin-icon{
-				width:26px;
+				width:22px;
 				height:12px;
-				text-align:center;
-				line-height:12px;
-				background-color:#ffffff;
-				color:#000000;
-				font-weight:bold;
-				font-size:10px;
-				border-radius:2px;
+				background-size:22px 12px;
+				@include bg-image('./images/bulletin')
 			}
 		}
 		.seller-info{
@@ -113,13 +109,10 @@
 				align-items:center;
 			}
 			.brand{
-				font-size:12px;
 				width:30px;
 				height:18px;
-				text-align:center;
-				line-height:18px;
-				background-color:#f01414;
-				border-radius:2px;
+				background-size:30px 18px;
+				@include bg-image('./images/brand')
 			}
 			.seller-name{
 				padding-left:6px;
@@ -140,12 +133,8 @@
 				.discount-icon{
 					width:16px;
 					height:16px;
-					background-color:#ffffff;
-					text-align:center;
-					line-height:16px;
-					font-size:10px;
-					color:#f67272;
-					border-radius:2px;
+					background-size:16px 16px;
+					@include bg-image('./images/decrease_1')
 				}
 				span{
 					font-size:12px;

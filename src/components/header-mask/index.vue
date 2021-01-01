@@ -64,6 +64,7 @@
 		width:100%;
 		z-index:1000;
 		background-color:rgba(7,17,27,.8);
+		backdrop-filter:blur(10px);
 		overflow:hidden;
 		.content{
 			padding:0 36px;
@@ -146,12 +147,12 @@
 			padding:12px 0;
 		}
 		.close-button{
-			font-size:20px;
+			font-size:18px;
 			color:#ffffff;
 		}
 	}
 	.my-fade-enter-active,.my-fade-leave-active{
-		transition:opacity .2s;
+		transition:opacity .1s;
 	}
 	.my-fade-enter,.my-fade-leave-to{
 		opacity:0;

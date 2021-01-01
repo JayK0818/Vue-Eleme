@@ -32,7 +32,6 @@
 					method:'get'
 				}).then(response => {
 					this.seller = response;
-					console.log(response);
 				})
 			}
 		}
@@ -45,7 +44,9 @@
 		flex-direction:column;
 		height:100%;
 		.content{
+			position:relative;
 			flex:1;
+			width:100%;
 		}
 	}
 </style>
