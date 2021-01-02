@@ -1,8 +1,14 @@
 <template>
 	<div class="goods-page">
-		<div class="menu-wrapper">
-			<ul class="menu-list">
-				<li class="menu-item" v-for="(menu,index) in goods_list" :key="'menu-'+index">
+		<loading v-if="loading"/>
+		<template v-else>
+			<div class="menu-wrapper">
+				<ul class="menu-list">
+				<li 
+					class="menu-item" 
+					v-for="(menu,index) in goods_list" :key="'menu-'+index" @click.stop="select_menu(index)"
+					:class="{active:current_index == index ? true : false}"
+				>
 					<span class="menu-name">
 						<i class="menu-icon" v-if="menu['type'] > 0" :class="icon_class[menu['type']]"></i>
 						{{menu['name']}}
@@ -10,59 +16,117 @@
 				</li>
 			</ul>
 		</div>
-		<div class="goods-wrapper">
-			<ul class="goods-list">
-				<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container">
-					<div class="food-type">{{good['name']}}</div>
-					<ul class="food-list">
-						<li v-for="(food,index) in good['foods']" :key="'food-'+index" class="food-item">
-							<div class="food-icon">
-								<img :src="food['icon']" width="100%" height="100%">
-							</div>
-							<div class="food-info">
-								<div class="food-name">{{food['name']}}</div>
-								<div class="food-description" v-if="food['description']">{{food['description']}}</div>
-								<div class="food-detail">
-									<span class="sell-count">月售{{food['sellCount']}}份</span>
-									<span class="food-rating">好评率{{food['rating']}}%</span>
+			<div class="goods-wrapper" ref='goods_list' @scroll.stop="listen_scroll">
+				<ul class="goods-list">
+					<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container">
+						<div class="food-type" ref="food_type">{{good['name']}}</div>
+						<ul class="food-list">
+							<li v-for="(food,index) in good['foods']" :key="'food-'+index" class="food-item">
+								<div class="food-icon">
+									<img :src="food['icon']" width="100%" height="100%">
 								</div>
-								<div class="price">
-									<span class="new-price">{{food['price']}}</span>
-									<span class="old-price" v-if="food['oldPrice']">{{food['oldPrice']}}</span>
+								<div class="food-info">
+									<div class="food-name">{{food['name']}}</div>
+									<div class="food-description" v-if="food['description']">{{food['description']}}</div>
+									<div class="food-detail">
+										<span class="sell-count">月售{{food['sellCount']}}份</span>
+										<span class="food-rating">好评率{{food['rating']}}%</span>
+									</div>
+									<div class="price">
+										<span class="new-price">{{food['price']}}</span>
+										<span class="old-price" v-if="food['oldPrice']">{{food['oldPrice']}}</span>
+									</div>
+									<div class="food-counter">
+										<div class="reduce-button" @click.stop="reduce(food)">
+											<transition name="slide-fade">
+												<a-icon v-show="food['count']" type="minus-circle" theme="filled"></a-icon>
+											</transition>
+										</div>
+										<span class="food-count" v-show="food['count']">{{food['count']}}</span>
+										<div class="add-button" @click.stop="add(food)">
+											<a-icon type="plus-circle" theme="filled"></a-icon>
+										</div>
+									</div>
 								</div>
-								<div class="food-counter">
-									<a-icon type="plus-circle"></a-icon>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</template>
 	</div>
 </template>
 
 <script>
+	import loading from '@/components/loading'
+	import {mapMutations} from 'vuex'
 	export default {
 		name:'goods',
 		data(){
 			return {
-				goods_list:[]
+				goods_list:[],
+				loading:true,
+				scroll_height:[],
+				current_index:0
 			}
 		},
 		created(){
 			this.get_goods();
 			this.icon_class = ['decrease','discount','special','invoice','garantee']
 		},
+		components:{loading},
 		methods:{
+			...mapMutations(['add_food','reduce_food']),
+			add(food){
+				this.add_food(food)
+			},
+			reduce(food){
+				this.reduce_food(food)
+			},
 			get_goods(){
 				this.axios({
 					url:"/api/goods",
 					method:'get',
 				}).then(response => {
-					console.log(response);
-					this.goods_list = response;
+					this.loading = false;
+					this.goods_list = response.map(item => {
+						let foods = item['foods'].map(food => {
+							return Object.assign({},food,{count:0})
+						})
+						return Object.assign({},item,{foods})
+					})
+					this.cacl_top()
 				})
+			},
+			cacl_top(){
+				this.$nextTick(() => {
+					let type = this.$refs.food_type, array = [];
+					type.forEach(function(el){
+						array.push(el.offsetTop);
+					})
+					this.scroll_height = array;
+				})
+			},
+			select_menu(index){
+				let top = this.scroll_height[index];
+				this.current_index = index;
+				this.$nextTick(() => {
+					let goods_list = this.$refs.goods_list;
+					goods_list.scrollTo({left:0,top,behavior:'smooth'})
+				})
+			},
+			cacl_index(top){
+				let index = 0;
+				for(let i = 0, length = this.scroll_height.length; i < length; i++){
+					if( top >= this.scroll_height[i] && top < this.scroll_height[i+1] ){
+						index = i;
+					}
+				}
+				return index;
+			},
+			listen_scroll(event){
+				let top = event.target.scrollTop;
+				this.current_index = this.cacl_index(top);
 			}
 		}
 	}
@@ -70,6 +134,15 @@
 
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
+	.slide-fade-enter-active,.slide-fade-leave-active{
+		transition:all .3s;
+	}
+	.slide-fade-enter,.slide-fade-leave-to{
+		transform:translateX(44px);
+	}
+	.slide-fade-enter-to,.slide-fade-leave{
+		transform:translateX(0);
+	}
 	.goods-page{
 		display:flex;
 		position:absolute;
@@ -152,11 +225,24 @@
 				}
 			}
 			.food-counter{
+				display:flex;
+				width:64px;
+				height:20px;
+				justify-content:space-between;
 				position:absolute;
 				right:0;
 				bottom:0;
 				font-size:20px;
 				color:rgb(0,160,220);
+				z-index:100;
+				.food-count{
+					font-size:10px;
+					flex:0 0 24px;
+					width:24px;
+					text-align:center;
+					color:rgb(147,153,159);
+					line-height:20px;
+				}
 			}
 		}
 		.menu-wrapper{
@@ -168,7 +254,6 @@
 			flex:1;
 		}
 		.menu-list{
-			padding:0 12px;
 			height:100%;
 			overflow:auto;
 		}
@@ -180,13 +265,22 @@
 			color:rgb(7,17,27);
 			font-weight:200;
 			line-height:14px;
-			@include border-bottom-1px(rgba(7,17,27,.1));
+			cursor:pointer;
+			padding:0 8px;
+			&.active{
+				background-color:#ffffff;
+				.menu-name{
+					@include border-none();
+				}
+			}
 			&:last-child{
 				@include border-none();
 			}
 			.menu-name{
+				width:100%;
 				display:table-cell;
 				vertical-align:middle;
+				@include border-bottom-1px(rgba(7,17,27,.1));
 			}
 			.menu-icon{
 				display:inline-block;

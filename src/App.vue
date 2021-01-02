@@ -3,7 +3,9 @@
 		<v-header :seller="seller"/>
 		<top-nav/>
 		<div class="content">
-			<router-view/>
+			<keep-alive>
+				<router-view/>
+			</keep-alive>
 		</div>
   </div>
 </template>

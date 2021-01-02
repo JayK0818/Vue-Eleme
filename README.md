@@ -69,3 +69,5 @@ configureWebpack:{
 [how to optimize-momentjs-with-webpack](https://github.com/jmblog/how-to-optimize-momentjs-with-webpack)
 	
 	Sticky footer布局
+	border-1px
+	

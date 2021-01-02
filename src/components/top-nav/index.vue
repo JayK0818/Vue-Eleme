@@ -29,11 +29,11 @@
 		text-align:center;
 		a{
 			display:block;
-			color:rgb(77,58,93);
+			color:#314659;
 			font-size:14px;
 		}
 		a.active{
-			color:rgb(240,20,20);
+			color:#1890ff;
 		}
 	}
 </style>
