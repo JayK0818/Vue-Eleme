@@ -18,10 +18,15 @@
 		</div>
 			<div class="goods-wrapper" ref='goods_list' @scroll.stop="listen_scroll">
 				<ul class="goods-list">
-					<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container">
-						<div class="food-type" ref="food_type">{{good['name']}}</div>
+					<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container" ref="food_container">
+						<div class="food-type">{{good['name']}}</div>
 						<ul class="food-list">
-							<li v-for="(food,index) in good['foods']" :key="'food-'+index" class="food-item">
+							<li
+								v-for="(food,index) in good['foods']" 
+								:key="'food-'+index" 
+								class="food-item"
+								@click.stop="go_to_detail(food)"
+							>
 								<div class="food-icon">
 									<img :src="food['icon']" width="100%" height="100%">
 								</div>
@@ -39,7 +44,7 @@
 									<div class="food-counter">
 										<div class="reduce-button" @click.stop="reduce(food)">
 											<transition name="slide-fade">
-												<a-icon v-show="food['count']" type="minus-circle" theme="filled"></a-icon>
+												<a-icon v-show="food['count'] > 0" type="minus-circle" theme="filled"></a-icon>
 											</transition>
 										</div>
 										<span class="food-count" v-show="food['count']">{{food['count']}}</span>
@@ -53,6 +58,7 @@
 					</li>
 				</ul>
 			</div>
+			<router-view/>
 		</template>
 	</div>
 </template>
@@ -76,7 +82,7 @@
 		},
 		components:{loading},
 		methods:{
-			...mapMutations(['add_food','reduce_food']),
+			...mapMutations(['add_food','reduce_food','click_detail']),
 			add(food){
 				this.add_food(food)
 			},
@@ -98,12 +104,19 @@
 					this.cacl_top()
 				})
 			},
+			go_to_detail(detail){
+				this.click_detail(detail);
+				this.$router.push(`/goods/${detail.id}`)
+			},
 			cacl_top(){
 				this.$nextTick(() => {
-					let type = this.$refs.food_type, array = [];
-					type.forEach(function(el){
+					let container = this.$refs.food_container, array = [];
+					container.forEach(function(el){
+						console.log(el.offsetTop);
 						array.push(el.offsetTop);
 					})
+					let last_child_height = container[container.length-1].clientHeight + container[container.length-1].offsetTop;
+					array.push(last_child_height)
 					this.scroll_height = array;
 				})
 			},
@@ -112,12 +125,12 @@
 				this.current_index = index;
 				this.$nextTick(() => {
 					let goods_list = this.$refs.goods_list;
-					goods_list.scrollTo({left:0,top,behavior:'smooth'})
+					goods_list.scrollTo({left:0,top,})
 				})
 			},
 			cacl_index(top){
 				let index = 0;
-				for(let i = 0, length = this.scroll_height.length; i < length; i++){
+				for(let i = 0, length = this.scroll_height.length - 1; i < length; i++){
 					if( top >= this.scroll_height[i] && top < this.scroll_height[i+1] ){
 						index = i;
 					}
@@ -135,13 +148,13 @@
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
 	.slide-fade-enter-active,.slide-fade-leave-active{
-		transition:all .3s;
+		transition:transform .4s;
 	}
 	.slide-fade-enter,.slide-fade-leave-to{
-		transform:translateX(44px);
+		transform:translate3d(44px,0,0);
 	}
 	.slide-fade-enter-to,.slide-fade-leave{
-		transform:translateX(0);
+		transform:translate3d(0,0,0) rotate(-180deg);
 	}
 	.goods-page{
 		display:flex;
@@ -234,9 +247,9 @@
 				bottom:0;
 				font-size:20px;
 				color:rgb(0,160,220);
-				z-index:100;
+				z-index:200;
 				.food-count{
-					font-size:10px;
+					font-size:12px;
 					flex:0 0 24px;
 					width:24px;
 					text-align:center;

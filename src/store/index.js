@@ -4,7 +4,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-		cart:[]
+		cart:[],
+		detail:{}
   },
   mutations: {
 		add_food(state,payload){
@@ -18,11 +19,11 @@ export default new Vuex.Store({
 		},
 		reduce_food(state,payload){
 			let food = state.cart.find(good => payload['id'] == good['id']);
+			if( food['count'] == 0 ) return;
 			food['count'] -= 1;
+		},
+		click_detail(state,payload){
+			state.detail = payload;
 		}
-  },
-  actions: {
-  },
-  modules: {
   }
 })

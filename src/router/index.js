@@ -5,7 +5,13 @@ Vue.use(VueRouter)
 const routes = [
 	{
 		path:'/goods',
-		component:() => import("@/views/goods")
+		component:() => import("@/views/goods"),
+		children:[
+			{
+				path:':id',
+				component:() => import("@/components/detail")
+			}
+		]
 	},
 	{
 		path:"/ratings",
