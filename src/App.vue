@@ -6,6 +6,7 @@
 			<keep-alive>
 				<router-view/>
 			</keep-alive>
+			<cart/>
 		</div>
   </div>
 </template>
@@ -13,6 +14,8 @@
 <script>
 	import nav from '@/components/top-nav'
 	import header from '@/components/header'
+	import cart from '@/components/cart'
+	import {mapMutations} from 'vuex'
 	export default {
 		name:"app",
 		data() {
@@ -25,15 +28,18 @@
 		},
 		components:{
 			'top-nav':nav,
-			'v-header':header
+			'v-header':header,
+			cart
 		},
 		methods:{
+			...mapMutations(['set_delivery_price']),
 			get_seller(){
 				this.axios({
 					url:'/api/seller',
 					method:'get'
 				}).then(response => {
 					this.seller = response;
+					this.set_delivery_price(response['deliveryPrice'])
 				})
 			}
 		}

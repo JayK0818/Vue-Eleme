@@ -5,9 +5,21 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 		cart:[],
-		detail:{}
+		detail:{},
+		delivery_price:0
   },
+	getters:{
+		total_price:(state) => {
+			return state.cart.reduce((prev,next) => prev + next['price']*next['count'],0)
+		},
+		total_count:state => {
+			return state.cart.reduce((prev,next) => prev + next['count'],0)
+		}
+	},
   mutations: {
+		set_delivery_price(state,price){
+			state.delivery_price = price
+		},
 		add_food(state,payload){
 			let food = state.cart.find(good => payload['id'] == good['id']);
 			if(food){
