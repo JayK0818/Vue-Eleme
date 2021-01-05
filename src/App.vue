@@ -32,7 +32,7 @@
 			cart
 		},
 		methods:{
-			...mapMutations(['set_delivery_price']),
+			...mapMutations(['set_delivery_price','set_min_price']),
 			get_seller(){
 				this.axios({
 					url:'/api/seller',
@@ -40,6 +40,7 @@
 				}).then(response => {
 					this.seller = response;
 					this.set_delivery_price(response['deliveryPrice'])
+					this.set_min_price(response['minPrice'])
 				})
 			}
 		}

@@ -6,7 +6,8 @@ export default new Vuex.Store({
   state: {
 		cart:[],
 		detail:{},
-		delivery_price:0
+		delivery_price:0,
+		min_price:0
   },
 	getters:{
 		total_price:(state) => {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
   mutations: {
 		set_delivery_price(state,price){
 			state.delivery_price = price
+		},
+		set_min_price(state,price){
+			state.min_price = price;
 		},
 		add_food(state,payload){
 			let food = state.cart.find(good => payload['id'] == good['id']);
