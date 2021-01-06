@@ -16,6 +16,7 @@
 	import header from '@/components/header'
 	import cart from '@/components/cart'
 	import {mapMutations} from 'vuex'
+	import {_message} from '@/components/message'
 	export default {
 		name:"app",
 		data() {
@@ -30,6 +31,16 @@
 			'top-nav':nav,
 			'v-header':header,
 			cart
+		},
+		mounted(){
+			_message({
+				content:'确定删除该商品吗?',
+				okText:"确定",
+				cancelText:"取消",
+				confirm:() => {
+					console.log('确定');
+				}
+			})
 		},
 		methods:{
 			...mapMutations(['set_delivery_price','set_min_price']),

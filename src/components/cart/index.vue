@@ -55,7 +55,7 @@
 		}
 		.cart-icon-wrapper{
 			display:inline-block;
-			transform:translateY(-8px);
+			transform:translateY(-12px);
 			position:relative;
 			background-color:#141d27;
 			padding:6px;
