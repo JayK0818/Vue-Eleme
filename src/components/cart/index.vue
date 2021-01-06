@@ -101,7 +101,8 @@
 		}
 		.total-price{
 			display:inline-block;
-			padding:0 12px 0 12px;
+			width:56px;
+			text-align:center;
 			vertical-align:top;
 			font-weight:bold;
 			font-size:12px;

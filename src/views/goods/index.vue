@@ -2,61 +2,61 @@
 	<div class="goods-page">
 		<loading v-if="loading"/>
 		<template v-else>
-			<div class="menu-wrapper">
+			<div class="menu-wrapper" ref="menu_list">
 				<ul class="menu-list">
-				<li 
-					class="menu-item" 
-					v-for="(menu,index) in goods_list" :key="'menu-'+index" @click.stop="select_menu(index)"
-					:class="{active:current_index == index ? true : false}"
-				>
-					<span class="menu-name">
-						<i class="menu-icon" v-if="menu['type'] > 0" :class="icon_class[menu['type']]"></i>
-						{{menu['name']}}
-					</span>
-				</li>
-			</ul>
-		</div>
-			<div class="goods-wrapper" ref='goods_list' @scroll.stop="listen_scroll">
-				<ul class="goods-list">
-					<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container" ref="food_container">
-						<div class="food-type">{{good['name']}}</div>
-						<ul class="food-list">
-							<li
-								v-for="(food,index) in good['foods']" 
-								:key="'food-'+index" 
-								class="food-item"
-								@click.stop="go_to_detail(food)"
-							>
-								<div class="food-icon">
-									<img :src="food['icon']" width="100%" height="100%">
-								</div>
-								<div class="food-info">
-									<div class="food-name">{{food['name']}}</div>
-									<div class="food-description" v-if="food['description']">{{food['description']}}</div>
-									<div class="food-detail">
-										<span class="sell-count">月售{{food['sellCount']}}份</span>
-										<span class="food-rating">好评率{{food['rating']}}%</span>
-									</div>
-									<div class="price">
-										<span class="new-price">{{food['price']}}</span>
-										<span class="old-price" v-if="food['oldPrice']">{{food['oldPrice']}}</span>
-									</div>
-									<div class="food-counter">
-										<div class="reduce-button" @click.stop="reduce(food)">
-											<transition name="slide-fade">
-												<a-icon v-show="food['count'] > 0" type="minus-circle" theme="filled"></a-icon>
-											</transition>
-										</div>
-										<span class="food-count" v-show="food['count']">{{food['count']}}</span>
-										<div class="add-button" @click.stop="add(food)">
-											<a-icon type="plus-circle" theme="filled"></a-icon>
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
+					<li 
+						class="menu-item" 
+						v-for="(menu,index) in goods_list" :key="'menu-'+index" @click.stop="select_menu(index)"
+						:class="{active:current_index == index ? true : false}"
+					>
+						<span class="menu-name">
+							<i class="menu-icon" v-if="menu['type'] > 0" :class="icon_class[menu['type']]"></i>
+							{{menu['name']}}
+						</span>
 					</li>
 				</ul>
+			</div>
+			<div class="goods-wrapper" ref='goods_list'>
+				<ul class="goods-list">
+						<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container" ref="food_container">
+							<div class="food-type">{{good['name']}}</div>
+							<ul class="food-list">
+								<li
+									v-for="(food,index) in good['foods']" 
+									:key="'food-'+index" 
+									class="food-item"
+									@click.stop="go_to_detail(food)"
+								>
+									<div class="food-icon">
+										<img :src="food['icon']" width="100%" height="100%">
+									</div>
+									<div class="food-info">
+										<div class="food-name">{{food['name']}}</div>
+										<div class="food-description" v-if="food['description']">{{food['description']}}</div>
+										<div class="food-detail">
+											<span class="sell-count">月售{{food['sellCount']}}份</span>
+											<span class="food-rating">好评率{{food['rating']}}%</span>
+										</div>
+										<div class="price">
+											<span class="new-price">{{food['price']}}</span>
+											<span class="old-price" v-if="food['oldPrice']">{{food['oldPrice']}}</span>
+										</div>
+										<div class="food-counter">
+											<div class="reduce-button" @click.stop="reduce(food)">
+												<transition name="slide-fade">
+													<a-icon v-show="food['count'] > 0" type="minus-circle" theme="filled"></a-icon>
+												</transition>
+											</div>
+											<span class="food-count" v-show="food['count']">{{food['count']}}</span>
+											<div class="add-button" @click.stop="add(food)">
+												<a-icon type="plus-circle" theme="filled"></a-icon>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</li>
+					</ul>
 			</div>
 			<router-view/>
 		</template>
@@ -65,6 +65,7 @@
 
 <script>
 	import loading from '@/components/loading'
+	import BScroll from 'better-scroll'
 	import {mapMutations} from 'vuex'
 	export default {
 		name:'goods',
@@ -73,16 +74,47 @@
 				goods_list:[],
 				loading:true,
 				scroll_height:[],
+				scrollY:0,
 				current_index:0
 			}
 		},
 		created(){
 			this.get_goods();
-			this.icon_class = ['decrease','discount','special','invoice','garantee']
+			this.icon_class = ['decrease','discount','special','invoice','garantee'];
+			this.food_scroll = null;
+			this.menu_scroll = null;
 		},
 		components:{loading},
+		watch:{
+			scrollY(value){
+				let index = 0;
+				for(let i = 0, length = this.scroll_height.length - 1; i < length; i++){
+					if( value >= this.scroll_height[i] && value < this.scroll_height[i+1] ){
+						index = i;
+					}
+				}
+				this.current_index = index;
+			}
+		},
 		methods:{
 			...mapMutations(['add_food','reduce_food','click_detail']),
+			_initial_scroll(){
+				this.food_scroll = new BScroll(this.$refs.goods_list,{
+					probeType:3,
+					click:true
+				}) ;
+				this.menu_scroll = new BScroll(this.$refs.menu_list,{
+					probeType:3,
+					click:true
+				})
+				this.food_scroll.on('scroll',({y}) => {
+					if(y > 0){
+						this.scrollY = 0; 
+						return;
+					}
+					this.scrollY = Math.abs(Math.round(y));
+				})
+			},
 			add(food){
 				this.add_food(food)
 			},
@@ -101,7 +133,10 @@
 						})
 						return Object.assign({},item,{foods})
 					})
-					this.cacl_top()
+					this.$nextTick(() => {
+						this.cacl_top()
+						this._initial_scroll();
+					})
 				})
 			},
 			go_to_detail(detail){
@@ -109,37 +144,16 @@
 				this.$router.push(`/goods/${detail.id}`)
 			},
 			cacl_top(){
-				this.$nextTick(() => {
-					let container = this.$refs.food_container, array = [];
-					container.forEach(function(el){
-						console.log(el.offsetTop);
-						array.push(el.offsetTop);
-					})
-					let last_child_height = container[container.length-1].clientHeight + container[container.length-1].offsetTop;
-					array.push(last_child_height)
-					this.scroll_height = array;
-				})
+				let container = this.$refs.food_container, array = [];
+				container.forEach(function(el){array.push(el.offsetTop)})
+				let last_child_height = container[container.length-1].clientHeight + container[container.length-1].offsetTop;
+				array.push(last_child_height)
+				this.scroll_height = array;
 			},
 			select_menu(index){
-				let top = this.scroll_height[index];
-				this.current_index = index;
-				this.$nextTick(() => {
-					let goods_list = this.$refs.goods_list;
-					goods_list.scrollTo({left:0,top,})
-				})
-			},
-			cacl_index(top){
-				let index = 0;
-				for(let i = 0, length = this.scroll_height.length - 1; i < length; i++){
-					if( top >= this.scroll_height[i] && top < this.scroll_height[i+1] ){
-						index = i;
-					}
-				}
-				return index;
-			},
-			listen_scroll(event){
-				let top = event.target.scrollTop;
-				this.current_index = this.cacl_index(top);
+				let aLi = document.querySelectorAll(".food-container");
+				let ele = aLi[index];
+				this.food_scroll.scrollToElement(ele);
 			}
 		}
 	}
@@ -163,6 +177,10 @@
 		bottom:46px;
 		width:100%;
 		background-color:#ffffff;
+		.scroll-container{
+			width:100%;
+			height:100%;
+		}
 		.goods-wrapper{
 			overflow:auto;
 			.food-list{
@@ -262,13 +280,10 @@
 			flex:0 0 80px;
 			width:80px;
 			background-color:#f3f5f7;
+			overflow:auto;
 		}
 		.goods-wrapper{
 			flex:1;
-		}
-		.menu-list{
-			height:100%;
-			overflow:auto;
 		}
 		.menu-item{
 			display:table;
