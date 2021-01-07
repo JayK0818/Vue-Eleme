@@ -13,6 +13,7 @@
 							<i class="menu-icon" v-if="menu['type'] > 0" :class="icon_class[menu['type']]"></i>
 							{{menu['name']}}
 						</span>
+						<div class="type-count" v-if="type_count(menu['name']) > 0">{{type_count(menu['name'])}}</div>
 					</li>
 				</ul>
 			</div>
@@ -94,6 +95,20 @@
 					}
 				}
 				this.current_index = index;
+			}
+		},
+		computed:{
+			type_count(){
+				return function(name){
+					let count = 0;
+					let find = this.goods_list.find(good => good['name'] == name);
+					count = find.foods.reduce((prev,next) => prev + next['count'],0);
+					if(count > 99){
+						return 99
+					}else{
+						return count;
+					}
+				}
 			}
 		},
 		methods:{
@@ -286,6 +301,7 @@
 			flex:1;
 		}
 		.menu-item{
+			position:relative;
 			display:table;
 			width:100%;
 			height:54px;
@@ -332,6 +348,21 @@
 				&.invoice{
 					@include bg-image("./images/invoice_3")
 				}
+			}
+			.type-count{
+				position:absolute;
+				right:0;
+				top:5px;
+				width:20px;
+				height:14px;
+				font-size:10px;
+				color:#ffffff;
+				text-align:center;
+				line-height:14px;
+				background-color:#e9150d;
+				border-radius:7px;
+				z-index:100;
+				box-shadow:0 4px 8px 0 rgba(0,0,0,.12);
 			}
 		}
 	}

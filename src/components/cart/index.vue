@@ -8,7 +8,7 @@
 					</div>
 					<div class="cart-food-count" v-show="total_count > 0">{{total_count > 99 ? 99 : total_count}}</div>
 				</div>
-				<div class="total-price">¥{{total_price}}</div>
+				<div class="total-price" :class="{active:total_price > 0 ? true : false}">¥ {{total_price}}</div>
 			</div>
 			<div class="delivery-price">另需配送费¥4元</div>
 		</div>
@@ -85,10 +85,11 @@
 				background-color:#e9150d;
 				color:#ffffff;
 				z-index:300;
-				right:-2px;
+				right:-4px;
 				top:-2px;
 				border-radius:8px;
 				font-size:12px;
+				box-shadow:0 4px 8px 0 rgba(0,0,0,.4);
 			}
 		}
 		.delivery-price{
@@ -109,10 +110,13 @@
 			line-height:46px;
 			color:rgba(255,255,255,.4);
 			border-right:1px solid rgba(255,255,255,.1);
+			&.active{
+				color:#ffffff;
+			}
 		}
 		.right-content{
 			height:46px;
-			width:105px;
+			width:100px;
 			flex:0 0 105px;
 			background-color:#2b333b;
 			color:rgba(255,255,255,.4);
@@ -121,7 +125,7 @@
 			line-height:46px;
 			text-align:center;
 			&.active{
-				background-color:#00a1dc;
+				background-color:#00c241;
 				color:#ffffff;
 			}
 		}
