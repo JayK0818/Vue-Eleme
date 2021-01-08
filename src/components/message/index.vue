@@ -46,7 +46,7 @@
 			top:50%;
 			transform:translate(-50%,-50%);
 			width:240px;
-			height:150px;
+			height:140px;
 			background-color:#ffffff;
 			border-radius:6px;
 		}
@@ -56,12 +56,12 @@
 		}
 		.footer-button{
 			display:flex;
-			height:50px;
+			height:40px;
 			@include border-top-1px(#e8e8e8);
 			.cancel-text,.confirm-text{
 				flex:1;
 				text-align:center;
-				line-height:50px;
+				line-height:40px;
 			}
 			.cancel-text{
 				color:#ff4d4f;

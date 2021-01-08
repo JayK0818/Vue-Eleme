@@ -3,7 +3,6 @@ import message from './index.vue'
 
 export const _message = (function(){
 	return function(options){
-		console.log(options)
 		let Message = Vue.extend(message);
 		let instance = new Message({
 			el:document.createElement("div"),
@@ -19,7 +18,8 @@ export const _message = (function(){
 			},
 			methods:{
 				handle_confirm(){
-					this.confirm()
+					this.confirm();
+					this.$emit("cancel");
 				},
 				handle_cancel(){
 					this.$emit('cancel');

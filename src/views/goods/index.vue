@@ -177,13 +177,15 @@
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
 	.slide-fade-enter-active,.slide-fade-leave-active{
-		transition:transform .4s;
+		transition:all .45s;
 	}
 	.slide-fade-enter,.slide-fade-leave-to{
 		transform:translate3d(44px,0,0);
+		opacity:0;
 	}
 	.slide-fade-enter-to,.slide-fade-leave{
 		transform:translate3d(0,0,0) rotate(-180deg);
+		opacity:1;
 	}
 	.goods-page{
 		display:flex;

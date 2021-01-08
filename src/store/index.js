@@ -38,6 +38,12 @@ export default new Vuex.Store({
 			if( food['count'] == 0 ) return;
 			food['count'] -= 1;
 		},
+		clear_food(state){
+			state.cart.forEach(food => {
+				food['count'] = 0;
+			})
+			state.cart = [];
+		},
 		click_detail(state,payload){
 			state.detail = payload;
 		}
