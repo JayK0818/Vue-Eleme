@@ -37,7 +37,6 @@
 		right:0;
 		bottom:0;
 		top:0;
-		background-color:rgba(0,0,0,.45);
 		z-index:10000;
 		transition:all .3s;
 		.message-container{
