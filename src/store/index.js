@@ -25,6 +25,7 @@ export default new Vuex.Store({
 			state.min_price = price;
 		},
 		add_food(state,payload){
+			console.log('payload',payload);
 			let food = state.cart.find(good => payload['id'] == good['id']);
 			if(food){
 				food['count'] += 1;

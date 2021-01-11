@@ -18,7 +18,14 @@
 						<span class="new-price">{{detail['price']}}</span>
 						<span v-if="detail['oldPrice']" class='old-price'>{{detail['oldPrice']}}</span>
 					</div>
-					<div class="add-button" v-if="detail['count'] == 0">加入购物车</div>
+					<div class="add-cart-wrapper">
+						<div class="add-button" v-if="detail['count'] == 0" @click.stop="add_cart">加入购物车</div>
+						<div class="count-wrapper" v-else>
+							<a-icon type="minus-circle" theme="filled" @click.stop="reduce"/>
+							<span class="count">{{detail['count']}}</span>
+							<a-icon type="plus-circle" theme='filled' @click.stop="add"/>
+						</div>
+					</div>
 				</div>
 				<div class="line-block" v-if="detail['description']"></div>
 				<div class="food-introduce" v-if="detail['description']">
@@ -32,7 +39,8 @@
 </template>
 
 <script>
-	import {mapState} from 'vuex'
+	import {mapState,mapMutations} from 'vuex'
+	import {_message} from '@/components/message'
 	import BScroll from 'better-scroll';
 	export default {
 		name:'detail',
@@ -53,8 +61,31 @@
 			...mapState(['detail'])
 		},
 		methods:{
+			...mapMutations(['add_food','reduce_food','clear_food']),
 			back(){
 				this.$router.back();
+			},
+			add_cart(){
+				this.add_food(this.detail);
+			},
+			add(){
+				this.add_food(this.detail)
+			},
+			reduce(){
+				let count = this.detail['count'];
+				console.log(count);
+				if(count == 1){
+					_message({
+						content:"确定删除当前商品吗?",
+						okText:"确定",
+						cancelText:"取消",
+						confirm:() => {
+							this.clear_food()
+						}
+					})
+				}else{
+					this.reduce_food(this.detail);
+				}
 			}
 		}
 	}
@@ -134,18 +165,33 @@
 					content:"¥"
 				}
 			}
-			.add-button{
+			.add-cart-wrapper{
 				position:absolute;
 				right:18px;
 				bottom:18px;
-				width:74px;
-				height:24px;
-				line-height:24px;
-				text-align:center;
-				border-radius:12px;
-				font-size:10px;
-				color:#ffffff;
-				background-color:rgb(0,160,220);
+				.add-button{
+					width:74px;
+					height:24px;
+					line-height:24px;
+					text-align:center;
+					border-radius:12px;
+					font-size:10px;
+					color:#ffffff;
+					background-color:rgb(0,160,220);
+				}
+				.count-wrapper{
+					display:flex;
+					align-items:center;
+					font-size:18px;
+					color:#00a1dc;
+					line-height:18px;
+				}
+				.count{
+					padding:0 10px;
+					color:#94969b;
+					font-size:14px;
+					line-height:18px;
+				}
 			}
 		}
 		.line-block{

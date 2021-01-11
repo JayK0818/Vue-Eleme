@@ -1,5 +1,5 @@
 <template>
-	<transition name='slide-fade' v-on:after-leave='leave'>
+	<transition name='slide-fade' v-on:after-leave='leave' appear>
 		<div class="message-wrapper" v-show="visible">
 			<div class="message-container">
 				<p class="content">{{content}}</p>
@@ -38,7 +38,7 @@
 		bottom:0;
 		top:0;
 		z-index:10000;
-		transition:all .3s;
+		transition:opacity .3s;
 		.message-container{
 			position:relative;
 			left:50%;
