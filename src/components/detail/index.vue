@@ -1,7 +1,7 @@
 <template>
 	<transition name="slide" appear>
 		<div class="detail-wrapper">
-			<section ref='detail_section'>
+			<section ref='detail_section' style="padding-bottom:48px;">
 				<div class="food-image">
 					<img :src="detail['image']" width="100%" height="100%" class='image'>
 					<div class="back-icon" @click.stop="back">
@@ -33,6 +33,29 @@
 					<p class="introduce-description">{{detail['description']}}</p>
 				</div>
 				<div class="line-block"></div>
+				<div class="rating-wrapper">
+					<div class="rating-select">
+						<div class="rating-title">商品评价</div>
+						<ul class="select-list">
+							<li class="select-item all">
+								全部
+								<span class="rating-count">{{detail['ratings'].length}}</span>
+							</li>
+							<li class="select-item recommend">
+								推荐
+								<span class="rating-count">{{like_rating}}</span>
+							</li>
+							<li class="select-item bad">
+								吐槽
+								<span class="rating-count">{{dislike_rating}}</span>
+							</li>
+						</ul>
+						<div class="toggle-rating">
+							<a-icon type="check-circle" theme="filled" class="toggle-icon"/>
+							<span class='text'>只看有内容的评价</span>
+						</div>
+					</div>
+				</div>
 			</section>
 		</div>
 	</transition>
@@ -50,7 +73,10 @@
 			}
 		},
 		created(){
+			console.log('detail-select');
 			this.$nextTick(() => {
+				let wrapper = this.$refs.detail_section;
+				console.log('wrapper:',wrapper);
 				this.scroll = new BScroll(this.$refs.detail_section,{
 					probeType:3,
 					click:true
@@ -58,7 +84,25 @@
 			})
 		},
 		computed:{
-			...mapState(['detail'])
+			...mapState(['detail']),
+			like_rating(){
+				let sum = 0;
+				this.detail['ratings'].forEach(rating => {
+					if(rating['rateType'] == 0){
+						sum += 1;
+					}
+				})
+				return sum;
+			},
+			dislike_rating(){
+				let sum = 0;
+				this.detail['ratings'].forEach(rating => {
+					if(rating['rateType'] == 1){
+						sum += 1;
+					}
+				})
+				return sum;
+			}
 		},
 		methods:{
 			...mapMutations(['add_food','reduce_food','clear_food']),
@@ -212,6 +256,58 @@
 				font-size:12px;
 				color:rgb(77,85,93);
 				line-height:24px;
+			}
+		}
+	}
+	.rating-select{
+		padding:18px 18px 0 18px;
+		@include border-bottom-1px(rgba(7,17,27,.1));
+		.rating-title{
+			font-size:14px;
+			color:rgb(7,17,27);
+		}
+		.select-list{
+			display:flex;
+			padding:18px 0;
+			@include border-bottom-1px(rgba(7,17,27,.1))
+		}
+		.select-item{
+			margin-left:8px;
+			width:60px;
+			height:32px;
+			border-radius:2px;
+			font-size:12px;
+			text-align:center;
+			line-height:32px;
+			&:first-child{
+				margin-left:0;
+			}
+			&.all{
+				background-color:rgb(0,160,220);
+				color:#ffffff;
+			}
+			&.recommend{
+				background-color:#ccecf8;
+				color:rgb(77,85,93);
+			}
+			&.bad{
+				background-color:#e9ebec;
+				color:rgb(77,85,93);
+			}
+			.rating-count{
+				font-size:8px;
+			}
+		}
+		.toggle-rating{
+			padding:12px 0;
+			line-height:24px;
+			color:rgb(147,153,159)
+			.toggle-icon{
+				font-size:24px;
+			}
+			.text{
+				padding-left:4px;
+				font-size:12px;
 			}
 		}
 	}

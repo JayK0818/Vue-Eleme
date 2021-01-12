@@ -70,6 +70,7 @@ configureWebpack:{
 	
 	Sticky footer布局
 	border-1px
+	fastclick
 	
 	
 	报错:
