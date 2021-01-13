@@ -1,17 +1,22 @@
 <template>
 	<div class="rating-list">
 		<div class="rating-item" v-for="(rating,index) in list" :key="'rating-'+index">
-			<div class="rating-time">{{rating['rateTime']}}</div>
+			<div class="rating-time">{{rating['rateTime'] | format_date}}</div>
 			<div class="rating-content">
 				<a-icon v-if="rating['rateType'] == 0" type="like" theme="filled" class="like-icon icon"></a-icon>
-				<a-icon v-if="raging['rateType'] == 1" type='dislike' theme="filled" class="dislike-icon icon"></a-icon>
-				<span class="rating-text">{{rating['text']}}</span>
+				<a-icon v-if="rating['rateType'] == 1" type='dislike' theme="filled" class="dislike-icon icon"></a-icon>
+				<span class="rating-text" v-if="rating['text']">{{rating['text']}}</span>
+			</div>
+			<div class="user-info">
+				<span class="username">{{rating['username']}}</span>
+				<img :src="rating['avatar']" class="avatar">
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import {format_date} from '@/common/js/util'
 	export default {
 		name:'rating-list',
 		props:{
@@ -21,12 +26,18 @@
 					return []
 				}
 			}
+		},
+		filters:{
+			format_date(value){
+				let date = format_date(value,'yyyy-MM-dd hh:mm');
+				return date;
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	@import '../../common/css/reset.scss';
+	@import '../../common/css/mixin.scss';
 	.rating-list{
 		padding:0 18px;
 		background-color:#ffffff;
@@ -39,6 +50,9 @@
 			font-size:10px;
 			color:rgb(147,153,159);
 			line-height:12px;
+		}
+		.rating-content{
+			padding-top:6px;
 		}
 		.rating-text{
 			padding-left:4px;
@@ -54,6 +68,23 @@
 			}
 			&.dislike-icon{
 				color:rgb(147,153,159);
+			}
+		}
+		.user-info{
+			position:absolute;
+			right:18px;
+			top:18px;
+			.avatar{
+				width:12px;
+				height:12px;
+				border-radius:50%;
+			}
+			.username{
+				padding-right:6px;
+				font-size:10px;
+				color:rgb(147,153,159);
+				line-height:12px;
+				vertical-align:1px;
 			}
 		}
 	}

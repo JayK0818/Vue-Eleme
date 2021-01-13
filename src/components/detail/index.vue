@@ -1,7 +1,7 @@
 <template>
 	<transition name="slide" appear>
-		<div class="detail-wrapper">
-			<section ref='detail_section' style="padding-bottom:48px;">
+		<div class="detail-wrapper" ref='detail_section'>
+			<section style="padding-bottom:48px;">
 				<div class="food-image">
 					<img :src="detail['image']" width="100%" height="100%" class='image'>
 					<div class="back-icon" @click.stop="back">
@@ -18,13 +18,15 @@
 						<span class="new-price">{{detail['price']}}</span>
 						<span v-if="detail['oldPrice']" class='old-price'>{{detail['oldPrice']}}</span>
 					</div>
-					<div class="add-cart-wrapper">
-						<div class="add-button" v-if="detail['count'] == 0" @click.stop="add_cart">加入购物车</div>
-						<div class="count-wrapper" v-else>
-							<a-icon type="minus-circle" theme="filled" @click.stop="reduce"/>
-							<span class="count">{{detail['count']}}</span>
-							<a-icon type="plus-circle" theme='filled' @click.stop="add"/>
+					<transition name="cart-fade">
+						<div class="add-cart-wrapper" v-if="detail['count'] == 0">
+							<div class="add-button" @click.stop="add_cart">加入购物车</div>
 						</div>
+					</transition>
+					<div class="count-wrapper" v-if="detail['count']">
+						<a-icon type="minus-circle" theme="filled" @click.stop="reduce"/>
+						<span class="count">{{detail['count']}}</span>
+						<a-icon type="plus-circle" theme='filled' @click.stop="add"/>
 					</div>
 				</div>
 				<div class="line-block" v-if="detail['description']"></div>
@@ -33,20 +35,20 @@
 					<p class="introduce-description">{{detail['description']}}</p>
 				</div>
 				<div class="line-block"></div>
-				<div class="rating-wrapper">
+				<div class="rating-wrapper" v-if="detail['ratings']">
 					<div class="rating-select">
 						<div class="rating-title">商品评价</div>
 						<ul class="select-list">
 							<li class="select-item all">
-								全部
+								<span class="rating-text">全部</span>
 								<span class="rating-count">{{detail['ratings'].length}}</span>
 							</li>
 							<li class="select-item recommend">
-								推荐
+								<span class="rating-text">推荐</span>
 								<span class="rating-count">{{like_rating}}</span>
 							</li>
 							<li class="select-item bad">
-								吐槽
+								<span class="rating-text">吐槽</span>
 								<span class="rating-count">{{dislike_rating}}</span>
 							</li>
 						</ul>
@@ -55,6 +57,7 @@
 							<span class='text'>只看有内容的评价</span>
 						</div>
 					</div>
+					<rating-list :list="detail['ratings']"/>
 				</div>
 			</section>
 		</div>
@@ -64,6 +67,7 @@
 <script>
 	import {mapState,mapMutations} from 'vuex'
 	import {_message} from '@/components/message'
+	import RatingList from '@/components/rating-list'
 	import BScroll from 'better-scroll';
 	export default {
 		name:'detail',
@@ -73,7 +77,6 @@
 			}
 		},
 		created(){
-			console.log('detail-select');
 			this.$nextTick(() => {
 				let wrapper = this.$refs.detail_section;
 				console.log('wrapper:',wrapper);
@@ -82,6 +85,9 @@
 					click:true
 				})
 			})
+		},
+		components:{
+			RatingList
 		},
 		computed:{
 			...mapState(['detail']),
@@ -143,6 +149,12 @@
 	.slide-enter,.slide-leave-to{
 		transform:translate3d(100%,0,0);
 	}
+	.cart-fade-enter-active,.cart-fade-leave-active{
+		transition:all .15s;
+	}
+	.cart-fade-enter,.cart-fade-leave-to{
+		opacity:0;
+	}
 	.detail-wrapper{
 		position:fixed;
 		left:0;right:0;top:0;bottom:46px;
@@ -163,13 +175,14 @@
 			position:absolute;
 			left:10px;
 			top:10px;
-			font-size:20px;
-			color:#ffffff;
+			font-size:18px;
+			color:rgb(250,250,250);
 		}
 		.food-info{
 			position:relative;
 			padding:18px;
 			width:100%;
+			@include border-bottom-1px(rgba(7,17,27,.1));
 			.food-name{
 				font-size:14px;
 				font-weight:bold;
@@ -223,19 +236,22 @@
 					color:#ffffff;
 					background-color:rgb(0,160,220);
 				}
-				.count-wrapper{
-					display:flex;
-					align-items:center;
-					font-size:18px;
-					color:#00a1dc;
-					line-height:18px;
-				}
-				.count{
-					padding:0 10px;
-					color:#94969b;
-					font-size:14px;
-					line-height:18px;
-				}
+			}
+			.count-wrapper{
+				position:absolute;
+				right:18px;
+				bottom:18px;
+				display:flex;
+				align-items:center;
+				font-size:18px;
+				color:#00a1dc;
+				line-height:18px;
+			}
+			.count{
+				padding:0 10px;
+				color:#94969b;
+				font-size:14px;
+				line-height:18px;
 			}
 		}
 		.line-block{
