@@ -36,28 +36,11 @@
 				</div>
 				<div class="line-block"></div>
 				<div class="rating-wrapper" v-if="detail['ratings']">
-					<div class="rating-select">
-						<div class="rating-title">商品评价</div>
-						<ul class="select-list">
-							<li class="select-item all">
-								<span class="rating-text">全部</span>
-								<span class="rating-count">{{detail['ratings'].length}}</span>
-							</li>
-							<li class="select-item recommend">
-								<span class="rating-text">推荐</span>
-								<span class="rating-count">{{like_rating}}</span>
-							</li>
-							<li class="select-item bad">
-								<span class="rating-text">吐槽</span>
-								<span class="rating-count">{{dislike_rating}}</span>
-							</li>
-						</ul>
-						<div class="toggle-rating">
-							<a-icon type="check-circle" theme="filled" class="toggle-icon"/>
-							<span class='text'>只看有内容的评价</span>
-						</div>
-					</div>
-					<rating-list :list="detail['ratings']"/>
+					<rating-select
+						title='商品评价'
+						:list="detail['ratings']"
+						:desc="desc"
+					/>
 				</div>
 			</section>
 		</div>
@@ -67,13 +50,17 @@
 <script>
 	import {mapState,mapMutations} from 'vuex'
 	import {_message} from '@/components/message'
-	import RatingList from '@/components/rating-list'
 	import BScroll from 'better-scroll';
+	import RatingSelect from '@/components/rating-select'
 	export default {
 		name:'detail',
 		data(){
 			return {
-				
+				desc:{
+					all:'全部',
+					positive:"推荐",
+					negative:"吐槽"
+				}
 			}
 		},
 		created(){
@@ -85,9 +72,6 @@
 					click:true
 				})
 			})
-		},
-		components:{
-			RatingList
 		},
 		computed:{
 			...mapState(['detail']),
@@ -110,6 +94,7 @@
 				return sum;
 			}
 		},
+		components:{RatingSelect},
 		methods:{
 			...mapMutations(['add_food','reduce_food','clear_food']),
 			back(){
@@ -272,58 +257,6 @@
 				font-size:12px;
 				color:rgb(77,85,93);
 				line-height:24px;
-			}
-		}
-	}
-	.rating-select{
-		padding:18px 18px 0 18px;
-		@include border-bottom-1px(rgba(7,17,27,.1));
-		.rating-title{
-			font-size:14px;
-			color:rgb(7,17,27);
-		}
-		.select-list{
-			display:flex;
-			padding:18px 0;
-			@include border-bottom-1px(rgba(7,17,27,.1))
-		}
-		.select-item{
-			margin-left:8px;
-			width:60px;
-			height:32px;
-			border-radius:2px;
-			font-size:12px;
-			text-align:center;
-			line-height:32px;
-			&:first-child{
-				margin-left:0;
-			}
-			&.all{
-				background-color:rgb(0,160,220);
-				color:#ffffff;
-			}
-			&.recommend{
-				background-color:#ccecf8;
-				color:rgb(77,85,93);
-			}
-			&.bad{
-				background-color:#e9ebec;
-				color:rgb(77,85,93);
-			}
-			.rating-count{
-				font-size:8px;
-			}
-		}
-		.toggle-rating{
-			padding:12px 0;
-			line-height:24px;
-			color:rgb(147,153,159)
-			.toggle-icon{
-				font-size:24px;
-			}
-			.text{
-				padding-left:4px;
-				font-size:12px;
 			}
 		}
 	}
