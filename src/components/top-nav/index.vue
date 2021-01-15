@@ -33,7 +33,7 @@
 			font-size:14px;
 		}
 		a.active{
-			color:#1890ff;
+			color:$highlight-color;
 		}
 	}
 </style>

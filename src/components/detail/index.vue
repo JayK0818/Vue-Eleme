@@ -39,7 +39,11 @@
 					<rating-select
 						title='商品评价'
 						:list="detail['ratings']"
+						:current_type="current_type"
 						:desc="desc"
+						:only_text='only_text'
+						@toggle="toggle"
+						@switch="switch_rating"
 					/>
 				</div>
 			</section>
@@ -60,13 +64,13 @@
 					all:'全部',
 					positive:"推荐",
 					negative:"吐槽"
-				}
+				},
+				only_text:false,
+				current_type:2
 			}
 		},
 		created(){
 			this.$nextTick(() => {
-				let wrapper = this.$refs.detail_section;
-				console.log('wrapper:',wrapper);
 				this.scroll = new BScroll(this.$refs.detail_section,{
 					probeType:3,
 					click:true
@@ -75,24 +79,6 @@
 		},
 		computed:{
 			...mapState(['detail']),
-			like_rating(){
-				let sum = 0;
-				this.detail['ratings'].forEach(rating => {
-					if(rating['rateType'] == 0){
-						sum += 1;
-					}
-				})
-				return sum;
-			},
-			dislike_rating(){
-				let sum = 0;
-				this.detail['ratings'].forEach(rating => {
-					if(rating['rateType'] == 1){
-						sum += 1;
-					}
-				})
-				return sum;
-			}
 		},
 		components:{RatingSelect},
 		methods:{
@@ -121,6 +107,12 @@
 				}else{
 					this.reduce_food(this.detail);
 				}
+			},
+			toggle(){
+				this.only_text = !this.only_text;
+			},
+			switch_rating(type){
+				this.current_type = type;
 			}
 		}
 	}
@@ -128,6 +120,7 @@
 
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
+	@import '../../common/css/variable.scss';
 	.slide-enter-active,.slide-leave-active{
 		transition:transform .3s;
 	}
@@ -144,7 +137,7 @@
 		position:fixed;
 		left:0;right:0;top:0;bottom:46px;
 		z-index:210;
-		background-color:#ffffff;
+		background-color:$white;
 		overflow:auto;
 		.food-image{
 			position:relative;
@@ -171,13 +164,13 @@
 			.food-name{
 				font-size:14px;
 				font-weight:bold;
-				color:rgb(7,17,27);
+				color:$font-color-1;
 				line-height:14px;
 			}
 			.sell-info{
 				padding-top:8px;
 				font-size:10px;
-				color:rgb(147,153,159);
+				color:$font-color-3;
 				line-height:10px;
 			}
 			.rating{
@@ -188,7 +181,7 @@
 			}
 			.new-price{
 				font-weight:bold;
-				color:rgb(240,20,20);
+				color:$price-color;
 				line-height:24px;
 				font-size:14px;
 				&:before{
@@ -201,7 +194,7 @@
 				padding-left:10px;
 				font-weight:bold;
 				font-size:10px;
-				color:rgb(147,153,159);
+				color:$font-color-3;
 				text-decoration:line-through;
 				&:before{
 					content:"¥"
@@ -218,8 +211,8 @@
 					text-align:center;
 					border-radius:12px;
 					font-size:10px;
-					color:#ffffff;
-					background-color:rgb(0,160,220);
+					color:$white;
+					background-color:$highlight-color;
 				}
 			}
 			.count-wrapper{
@@ -229,33 +222,33 @@
 				display:flex;
 				align-items:center;
 				font-size:18px;
-				color:#00a1dc;
+				color:$highlight-color;
 				line-height:18px;
-			}
-			.count{
-				padding:0 10px;
-				color:#94969b;
-				font-size:14px;
-				line-height:18px;
+				.count{
+					padding:0 10px;
+					color:#94969b;
+					font-size:14px;
+					line-height:18px;
+				}
 			}
 		}
 		.line-block{
 			height:16px;
 			background:#f3f5f7;
 			width:100%;
-			@include border-top-1px(rgba(7,17,27,.1));
-			@include border-bottom-1px(rgba(7,17,27,.1));
+			@include border-top-1px($border-color);
+			@include border-bottom-1px($border-color);
 		}
 		.food-introduce{
 			padding:18px;
 			.introduce-title{
 				font-size:14px;
-				color:rgb(7,17,27);
+				color:$font-color-1;
 			}
 			.introduce-description{
 				padding:6px 8px 0 8px;
 				font-size:12px;
-				color:rgb(77,85,93);
+				color:$font-color-2;
 				line-height:24px;
 			}
 		}

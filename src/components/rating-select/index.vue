@@ -3,16 +3,28 @@
 		<div class="rating-select">
 			<div class="rating-title">{{title}}</div>
 			<div class="select-item-list">
-				<div class="select-item all">{{desc['all']}} <span class="count"></span></div>
-				<div class="select-item positive">{{desc['positive']}} <span class="count"></span></div>
-				<div class="select-item negative">{{desc['negative']}} <span class="count"></span></div>
+				<div 
+					class="select-item all" 
+					:class="{active:current_type == 2 ? true : false}"
+					@click.stop="switch_rating(2)"
+				>{{desc['all']}} <span class="count">{{list.length}}</span></div>
+				<div 
+					class="select-item positive" 
+					:class="{active:current_type == 0 ? true : false}"
+					@click.stop="switch_rating(0)"
+				>{{desc['positive']}} <span class="count">{{positive.length}}</span></div>
+				<div 
+					class="select-item negative" 
+					:class="{active:current_type == 1 ? true : false}"
+					@click.stop="switch_rating(1)"
+				>{{desc['negative']}} <span class="count">{{negative.length}}</span></div>
 			</div>
 			<div class="toggle-content">
-				<a-icon type="check-circle" theme='filled' class='icon'/>
-				<span class="text">只看有内容的评价</span>
+				<a-icon type="check-circle" theme='filled' class='icon' @click.stop="toggle_content" :class="{active:only_text ? true : false}"/>
+				<span class="text" @click.stop="toggle_content">只看有内容的评价</span>
 			</div>
 		</div>
-		<div class="rating-list">
+		<div class="rating-list" v-if="list.length">
 			<ul>
 				<li class="rating-item" v-for="(rating,index) in list" :key="'rating-'+index">
 					<div class="rating-time">{{rating['rateTime'] | format}}</div>
@@ -28,14 +40,16 @@
 				</li>
 			</ul>
 		</div>
+		<a-empty description="暂无评价" v-else/>
 	</div>
 </template>
 
 <script>
-	// const POSITIVE = 0;
-	// const NEGATIVE = 1;
+	const POSITIVE = 0;
+	const NEGATIVE = 1;
 	const ALL = 2;
 	import {format_date} from '@/common/js/util'
+	import {Empty} from 'ant-design-vue'
 	export default {
 		name:'rating-select',
 		filters:{
@@ -72,24 +86,44 @@
 					}
 				}
 			}
+		},
+		computed:{
+			positive(){
+				return this.list.filter(rating => rating['rateType'] == POSITIVE)
+			},
+			negative(){
+				return this.list.filter(rating => rating['rateType'] == NEGATIVE)
+			}
+		},
+		components:{
+			[Empty.name]:Empty
+		},
+		methods:{
+			toggle_content(){
+				this.$emit("toggle")
+			},
+			switch_rating(type){
+				this.$emit("switch",type)
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
+	@import '../../common/css/variable.scss';
 	.rating-select{
 		padding:18px 18px 0;
 		background-color:#ffffff;
-		@include border-bottom-1px(rgba(7,17,27,.1))
+		@include border-bottom-1px($border-color)
 		.rating-title{
-			color:rgb(7,17,27);
+			color:$font-color-1;
 			font-size:14px;
 		}
 		.select-item-list{
 			padding:18px 0;
 			display:flex;
-			@include border-bottom-1px(rgba(7,17,27,.1))
+			@include border-bottom-1px($border-color)
 		}
 		.select-item{
 			margin-right:8px;
@@ -98,16 +132,28 @@
 			font-size:12px;
 			border-radius:2px;
 			&.all{
-				background-color:#00a0dc;
-				color:#ffffff;
+				background-color:#ccecf8;
+				color:$font-color-2;
+				&.active{
+					color:#ffffff;
+					background-color:$highlight-color;
+				}
 			}
 			&.positive{
 				background-color:#ccecf8;
-				color:rgb(77,85,93);
+				color:$font-color-2;
+				&.active{
+					color:#ffffff;
+					background-color:$highlight-color;
+				}
 			}
 			&.negative{
 				background-color:rgba(77,85,93,.2);
-				color:rgb(77,85,93);
+				color:$font-color-2;
+				&.active{
+					background-color:$font-color-2;
+					color:#ffffff;
+				}
 			}
 			.count{
 				font-size:8px;
@@ -115,7 +161,7 @@
 		}
 		.toggle-content{
 			padding:12px 0;
-			color:rgb(147,153,159);
+			color:$font-color-3;
 			.text{
 				padding-left:4px;
 				font-size:12px;
@@ -124,6 +170,9 @@
 			.icon{
 				font-size:18px;
 				vertical-align:-4px;
+				&.active{
+					color:$check-color;
+				}
 			}
 		}
 	}
@@ -133,14 +182,14 @@
 		.rating-item{
 			position:relative;
 			padding:12px 0;
-			@include border-bottom-1px(rgba(7,17,27,.1));
+			@include border-bottom-1px($border-color);
 			&:last-child{
 				@include border-none();
 			}
 		}
 		.rating-time{
 			font-size:10px;
-			color:rgb(147,153,159);
+			color:$font-color-3;
 			line-height:12px;
 		}
 		.rating-content{
@@ -150,17 +199,17 @@
 			white-space:nowrap;
 			.rating-text{
 				padding-left:4px;
-				color:rgb(7,17,27);
+				color:$font-color-1;
 				line-height:16px;
 				font-size:12px;
 			}
 			.icon{
 				font-size:14px;
 				&.like-icon{
-					color:rgb(0,160,220);
+					color:$highlight-color;
 				}
 				&.dislike-icon{
-					color:rgb(147,153,159);
+					color:$font-color-3;
 				}
 			}
 		}
@@ -172,7 +221,7 @@
 		.username{
 			padding-right:6px;
 			font-size:10px;
-			color:rgb(147,153,159);
+			color:$font-color-3;
 			line-height:12px;
 		}
 		.avatar{

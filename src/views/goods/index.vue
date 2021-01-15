@@ -176,6 +176,7 @@
 
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
+	@import '../../common/css/variable.scss';
 	.slide-fade-enter-active,.slide-fade-leave-active{
 		transition:all .45s;
 	}
@@ -193,7 +194,7 @@
 		top:0;
 		bottom:46px;
 		width:100%;
-		background-color:#ffffff;
+		background-color:$white;
 		.scroll-container{
 			width:100%;
 			height:100%;
@@ -206,7 +207,7 @@
 			.food-item{
 				display:flex;
 				padding:18px 0;
-				@include border-bottom-1px(rgba(7,17,27,.1));
+				@include border-bottom-1px($border-color);
 				&:last-child{
 					@include border-none();
 				}
@@ -215,7 +216,7 @@
 				padding-left:14px;
 				height:26px;
 				font-size:12px;
-				color:rgb(147,153,159);
+				color:$font-color-3;
 				line-height:26px;
 				background-color:#f3f5f7;
 				border-left:2px solid #d9dde1;
@@ -235,7 +236,7 @@
 			.food-name{
 				padding-top:2px;
 				font-size:14px;
-				color:rgb(7,17,27);
+				color:$font-color-1;
 				line-height:14px;
 			}
 			.food-description,.food-detail{
@@ -243,7 +244,7 @@
 			}
 			.sell-count,.food-rating,.food-description{
 				font-size:10px;
-				color:rgb(147,153,159);
+				color:$font-color-3;
 			}
 			.food-rating{
 				padding-left:12px;
@@ -254,7 +255,7 @@
 			.new-price{
 				font-size:14px;
 				line-height:24px;
-				color:rgb(240,20,20);
+				color:$price-color;
 				font-weight:700;
 				&:before{
 					content:"¥";
@@ -266,7 +267,7 @@
 				padding-left:8px;
 				font-size:10px;
 				text-decoration:line-through;
-				color:rgb(147,153,159);
+				color:$font-color-3;
 				line-height:24px;
 				&:before{
 					content:"¥",
@@ -281,14 +282,14 @@
 				right:0;
 				bottom:0;
 				font-size:20px;
-				color:rgb(0,160,220);
+				color:$highlight-color;
 				z-index:200;
 				.food-count{
 					font-size:12px;
 					flex:0 0 24px;
 					width:24px;
 					text-align:center;
-					color:rgb(147,153,159);
+					color:$font-color-3;
 					line-height:20px;
 				}
 			}
@@ -308,13 +309,13 @@
 			width:100%;
 			height:54px;
 			font-size:12px;
-			color:rgb(7,17,27);
+			color:$font-color-1;
 			font-weight:200;
 			line-height:14px;
 			cursor:pointer;
 			padding:0 8px;
 			&.active{
-				background-color:#ffffff;
+				background-color:$white;
 				.menu-name{
 					@include border-none();
 				}
@@ -326,7 +327,7 @@
 				width:100%;
 				display:table-cell;
 				vertical-align:middle;
-				@include border-bottom-1px(rgba(7,17,27,.1));
+				@include border-bottom-1px($border-color);
 			}
 			.menu-icon{
 				display:inline-block;
@@ -358,10 +359,10 @@
 				width:20px;
 				height:14px;
 				font-size:10px;
-				color:#ffffff;
+				color:$white;
 				text-align:center;
 				line-height:14px;
-				background-color:#e9150d;
+				background-color:$price-color;
 				border-radius:7px;
 				z-index:100;
 				box-shadow:0 4px 8px 0 rgba(0,0,0,.12);

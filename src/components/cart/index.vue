@@ -135,7 +135,7 @@
 
 <style lang='scss' scoped>
 	@import '../../common/css/mixin.scss';
-
+	@import '../../common/css/variable.scss';
 	.slide-fade-enter-active, .slide-fade-leave-active {
 		transition: all .3s;
 	}
@@ -164,7 +164,7 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-color: #ffffff;
+			background-color: $white;
 			z-index:305;
 			.cart-title {
 				display: flex;
@@ -173,7 +173,7 @@
 				height: 40px;
 				padding: 0 18px;
 				background-color: #f3f5f7;
-				color: rgb(7, 17, 27);
+				color: $font-color-1;
 				font-size: 14px;
 				@include border-bottom-1px(rgba(7, 17, 27, .1));
 			}
@@ -185,19 +185,19 @@
 			}
 
 			.clear {
-				color: rgb(0, 160, 220);
+				color: $highlight-color;
 			}
 
 			.cart-list {
 				padding: 0 18px 50px;
-				background-color: #ffffff;
+				background-color: $white;
 
 				.food-item {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
 					height: 48px;
-					@include border-bottom-1px(rgba(7, 17, 27, .1))
+					@include border-bottom-1px($border-color)
 				}
 
 				.food-name {
@@ -206,7 +206,7 @@
 					overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
-					color: rgb(7, 17, 27);
+					color: $font-color-1;
 					font-size: 14px;
 				}
 
@@ -217,7 +217,7 @@
 
 				.price {
 					padding: 0 12px 0 18px;
-					color: rgb(240, 20, 20);
+					color: $price-color;
 					font-weight: bold;
 					font-size: 14px;
 				}
@@ -229,14 +229,14 @@
 				}
 
 				.icon {
-					color: #00a0dc;
+					color: $highlight-color;
 					font-size: 18px;
 				}
 
 				.count {
 					width: 24px;
 					text-align: center;
-					color: rgb(147, 153, 159);
+					color: $font-color-3;
 					font-size: 10px;
 				}
 			}
@@ -280,8 +280,8 @@
 				color: #80858d;
 
 				&.active {
-					background-color: #00a1dc;
-					color: #ffffff;
+					background-color: $highlight-color;
+					color: $white;
 				}
 			}
 
@@ -291,8 +291,8 @@
 				height: 16px;
 				line-height: 16px;
 				text-align: center;
-				background-color: #e9150d;
-				color: #ffffff;
+				background-color: $price-color;
+				color: $white;
 				z-index: 300;
 				right: -4px;
 				top: -2px;
@@ -323,7 +323,7 @@
 			border-right: 1px solid rgba(255, 255, 255, .1);
 
 			&.active {
-				color: #ffffff;
+				color: $white;
 			}
 		}
 
@@ -339,8 +339,8 @@
 			text-align: center;
 
 			&.active {
-				background-color: #00c241;
-				color: #ffffff;
+				background-color: $check-color;
+				color: $white;
 			}
 		}
 	}
