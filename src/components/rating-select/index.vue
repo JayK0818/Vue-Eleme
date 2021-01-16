@@ -26,7 +26,7 @@
 		</div>
 		<div class="rating-list" v-if="list.length">
 			<ul>
-				<li class="rating-item" v-for="(rating,index) in list" :key="'rating-'+index">
+				<li class="rating-item" v-for="(rating,index) in list" :key="'rating-'+index"  v-show="need_show(rating['rateType'],rating['text'])">
 					<div class="rating-time">{{rating['rateTime'] | format}}</div>
 					<div class="rating-content">
 						<a-icon type="like" class='icon like-icon' theme="filled" v-if="rating['rateType'] == 0"/>
@@ -104,6 +104,16 @@
 			},
 			switch_rating(type){
 				this.$emit("switch",type)
+			},
+			need_show(type,text){	// 如果要显示内容但是又没有内容 则返回false
+				if(this.only_text && !text){
+					return false;
+				}	
+				if(this.current_type == ALL){
+					return true;
+				}else{
+					return this.current_type == type;
+				}
 			}
 		}
 	}
