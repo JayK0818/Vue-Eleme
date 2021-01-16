@@ -1,10 +1,18 @@
 <template>
-	<div class="seller-page"></div>
+	<div class="seller-page">
+		商家页面
+	</div>
 </template>
 
 <script>
 	export default {
-		name :'seller'
+		name :'seller',
+		created(){
+			
+		},
+		methods:{
+
+		}
 	}
 </script>
 

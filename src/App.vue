@@ -4,7 +4,7 @@
 		<top-nav/>
 		<div class="content">
 			<keep-alive>
-				<router-view/>
+				<router-view :seller="seller"/>
 			</keep-alive>
 			<cart/>
 		</div>

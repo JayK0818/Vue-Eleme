@@ -192,6 +192,7 @@
 		display:flex;
 		position:absolute;
 		top:0;
+		left:0;
 		bottom:46px;
 		width:100%;
 		background-color:$white;

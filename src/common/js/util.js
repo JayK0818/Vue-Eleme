@@ -19,6 +19,6 @@ export function format_date(timestamp,fmt){
 }
 
 function paddingLeftZero(str){
-	str = str + "";
+	str = str + '';
 	return ( '00' + str ).substring(str.length);
 }
