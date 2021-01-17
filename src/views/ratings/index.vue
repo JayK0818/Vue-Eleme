@@ -41,25 +41,31 @@
 				/>
 				<div class="rating-list">
 					<ul>
-						<li v-for="(rating,index) in rating_list" :key="'rating-'+index" class="rating-item">
-							<div class="avatar">
-								<img :src="rating['avatar']" width="28" height="28">
-							</div>
-							<div class="rating-detail">
-								<div class="rating-time">{{rating['rateTime'] | format_time}}</div>
-								<p class="username">{{rating['username']}}</p>
-								<div class="star-wrapper">
-									<star :size="24" :score="rating['score']"></star>
+						<template v-for="(rating,index) in rating_list">
+							<li :key="'rating-'+index" class="rating-item" v-show="need_show(rating['rateType'],rating['text'])">
+								<div class="avatar">
+									<img :src="rating['avatar']" width="28" height="28">
 								</div>
-								<span class="delivery-time"></span>
-								<div class="rating-text">
-									{{rating['text']}}
+								<div class="rating-detail">
+									<div class="rating-time">{{rating['rateTime'] | format_time}}</div>
+									<p class="username">{{rating['username']}}</p>
+									<div class="star-container">
+										<star :size="24" :score="rating['score']"></star>
+										<span class="delivery-time">{{rating['deliveryTime']}}分钟送达</span>
+									</div>
+									<div class="rating-text">{{rating['text']}}</div>
+									<div class="recommend-list">
+										<a-icon v-if="rating['rateType'] == 0" type="like" theme="filled" class="icon active"></a-icon>
+										<a-icon v-else type="dislike" theme="filled" class='icon'></a-icon>
+										<div 
+											class="recommend-item"
+											v-for="(recommend,i) in rating['recommend']"
+											:key="'recommend-'+i"
+										>{{recommend}}</div>
+									</div>
 								</div>
-								<div class="recomment-list">
-									
-								</div>
-							</div>
-						</li>
+							</li>
+						</template>
 					</ul>
 				</div>
 			</div>
@@ -73,6 +79,8 @@
 	import loading from '@/components/loading'
 	import RatingSelect from '@/components/rating-select'
 	import {format_date} from '@/common/js/util'
+	import {Tag} from 'ant-design-vue'
+	const ALL = 2;
 	export default {
 		name:'ratings',
 		data(){
@@ -85,6 +93,8 @@
 		},
 		created(){
 			this.get_ratings();
+			this.tag_class = ['pink','red','orange','green','cyan','blue','purple'];
+			this.scroll = null;
 		},
 		filters:{
 			format_time(value){
@@ -97,11 +107,11 @@
 				required:true
 			}
 		},
-		components:{star,loading,RatingSelect},
+		components:{star,loading,RatingSelect,[Tag.name]:Tag},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {
-					new BScroll(this.$refs.rating_page,{
+					this.scroll =	new BScroll(this.$refs.rating_page,{
 						click:true,
 						probeType:3
 					})
@@ -113,16 +123,31 @@
 					method:'get'
 				}).then(response => {
 					this.rating_list = response;
-					console.log(response);
 					this.loading = false;
 					this._init_scroll();
 				})
 			},
 			toggle_content(){
 				this.only_text = !this.only_text;
+				this.$nextTick(() => {
+					this.scroll.refresh();
+				})
 			},
 			switch_rating(type){
 				this.current_type = type;
+				this.$nextTick(() => {
+					this.scroll.refresh();
+				})
+			},
+			need_show(type,text){
+				if(this.only_text && !text){
+					return false;
+				}
+				if(this.current_type == ALL){
+					return true;
+				}else{
+					return this.current_type == type;
+				}
 			}
 		}
 	}
@@ -225,17 +250,73 @@
 		.avatar{
 			width:28px;
 			height:28px;
+			flex:0 0 28px;
 			border-radius:50%;
 			img{
 				border-radius:50%;
 			}
 		}
 		.rating-detail{
+			flex:1;
 			position:relative;
+			padding-left:12px;
 			.rating-time{
 				position:absolute;
 				right:0;
 				top:0;
+			}
+			.username{
+				font-size:10px;
+				color:$font-color-1;
+				line-height:12px;
+			}
+			.star-container{
+				display:flex;
+				padding-top:4px;
+			}
+			.delivery-time{
+				padding-left:6px;
+				font-size:10px;
+				color:$font-color-3;
+				line-height:12px;
+			}
+			.rating-text{
+				padding:6px 0 8px;
+				font-size:12px;
+				color:$font-color-1;
+				line-height:18px;
+			}
+			.rating-time{
+				font-size:10px;
+				color:$font-color-3;
+				line-height:12px;
+			}
+			.recommend-list{
+				display:flex;
+				flex-wrap:wrap;
+			}
+			.icon{
+				margin-right:8px;
+				font-size:12px;
+				line-height:20px;
+				color:rgb(183,187,191);
+				&.active{
+					color:$highlight-color;
+				}
+			}
+			.recommend-item{
+				margin-right:8px;
+				margin-bottom:8px;
+				padding:0 6px;
+				width:62px;
+				overflow:auto;
+				white-space:nowrap;
+				text-overflow:ellipsis;
+				background-color:#ffffff;
+				border:1px solid $border-color;
+				font-size:9px;
+				color:$font-color-3;
+				line-height:16px;
 			}
 		}
 	}

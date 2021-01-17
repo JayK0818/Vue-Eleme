@@ -90,12 +90,8 @@
 			}
 		},
 		created(){
-			this.$nextTick(() => {
-				this.scroll = new BScroll(this.$refs.detail_section,{
-					probeType:3,
-					click:true
-				})
-			})
+			this._init_scroll();
+			this.scroll = null;
 		},
 		computed:{
 			...mapState(['detail']),
@@ -108,6 +104,14 @@
 		components:{RatingSelect,[Empty.name]:Empty},
 		methods:{
 			...mapMutations(['add_food','reduce_food','clear_food']),
+			_init_scroll(){
+				this.$nextTick(() => {
+					this.scroll = new BScroll(this.$refs.detail_section,{
+						probeType:3,
+						click:true
+					})
+				})
+			},
 			back(){
 				this.$router.back();
 			},
@@ -145,9 +149,15 @@
 			},
 			toggle(){
 				this.only_text = !this.only_text;
+				this.$nextTick(() => {
+					this.scroll.refresh();
+				})
 			},
 			switch_rating(type){
 				this.current_type = type;
+				this.$nextTick(() => {
+					this.scroll.refresh();
+				})
 			}
 		}
 	}
