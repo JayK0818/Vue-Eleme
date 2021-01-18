@@ -42,8 +42,8 @@
 			<div class="block"></div>
 			<div class="live-wrapper">
 				<div class="title">商家实景</div>
-				<div class="pic-container">
-					<ul class="pic-list">
+				<div class="pic-container" ref='pic_container'>
+					<ul class="pic-list" ref="pic_list">
 						<li v-for="(pic,index) in seller['pics']" :key="'pic-'+index" class='pic-item'>
 							<img :src="pic" width="120" height="90">
 						</li>
@@ -64,11 +64,13 @@
 <script>
 	import star from '@/components/star'
 	import BScroll from 'better-scroll'
+	const RIGHT = 6;
+	import {tip} from '@/components/tip/index.js'
 	export default {
 		name :'seller',
 		data(){
 			return {
-				is_collect:false
+				is_collect:false,
 			}
 		},
 		props:{
@@ -80,23 +82,63 @@
 			}
 		},
 		created(){
-			this._init_scroll();
+			this.scroll = null;
+			this.pic_scroll = null;
 			this.class_map = ['decrease','discount','special','invoice','guarantee']
+			this.calc_width()
+			setTimeout(() => {
+				this._init_scroll();
+				this._init_pics()
+			},0)
 		},
-		components:{
-			star
-		},
+		components:{star},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {
-					this.scroll = new BScroll(this.$refs.seller_page,{
-						click:true,
-						probeType:3
-					})
+					if(!this.scroll){
+						this.scroll = new BScroll(this.$refs.seller_page,{
+							click:true,
+							probeType:3
+						})
+					}else{
+						this.scroll.refresh()
+					}
+				})
+			},
+			_init_pics(){
+				this.$nextTick(() => {
+					if(!this.pic_scroll){
+						this.pic_scroll = new BScroll(this.$refs.pic_container,{
+							scrollX:true,
+							startX:0,
+							scrollY:false,
+							click:true,
+							eventPassthrough:"vertical"
+						})
+					}else{
+						this.pic_scroll.refresh();
+					}
 				})
 			},
 			toggle_collect(){
 				this.is_collect = !this.is_collect
+				if(this.is_collect){
+					tip({
+						success:true,
+						text:"已收藏"
+					})
+				}else{
+					tip({
+						success:false,
+						text:"取消收藏"
+					})
+				}
+			},
+			calc_width(){
+				this.$nextTick(() => {
+					let width = (120 + RIGHT) * this.seller['pics'].length - RIGHT;
+					this.$refs.pic_list.style.width = width + 'px';
+				})
 			}
 		}
 	}
@@ -131,7 +173,7 @@
 			top:0;
 		}
 		.heart-icon{
-			font-size:24px;
+			font-size:20px;
 			color:rgb(147,153,159);
 			&.active{
 				color:rgb(240,20,20);
@@ -262,6 +304,9 @@
 			margin-right:6px;
 			width:120px;
 			height:90px;
+			&:last-child{
+				margin-right:0;
+			}
 		}
 	}
 	.seller-wrapper{

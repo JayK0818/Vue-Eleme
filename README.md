@@ -76,3 +76,7 @@ configureWebpack:{
 	报错:
 	show_detail computed property vue/no-side-effects-in-computed-properties
 	在ESLint的情况下，computed中不能直接修改data中的数据,可以在methods中修改,然后在computed中调用该方法。
+	
+	报错:
+	Unable to preventDefault inside passive event listener due to target being treated as passive.
+[报错原因](https://blog.csdn.net/lijingshan34/article/details/88350456)

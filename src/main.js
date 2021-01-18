@@ -5,6 +5,8 @@ import router from './router'
 import store from './store'
 import axios from './common/js/api';
 import {Icon} from 'ant-design-vue'
+import FastClick from 'fastclick';
+FastClick.attach(document.body);
 Vue.prototype.axios = axios;
 Vue.config.productionTip = false
 Vue.component(Icon.name,Icon)

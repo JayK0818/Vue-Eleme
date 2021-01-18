@@ -51,7 +51,7 @@
 									<p class="username">{{rating['username']}}</p>
 									<div class="star-container">
 										<star :size="24" :score="rating['score']"></star>
-										<span class="delivery-time">{{rating['deliveryTime']}}分钟送达</span>
+										<span class="delivery-time" v-if="rating['deliveryTime']">{{rating['deliveryTime']}}分钟送达</span>
 									</div>
 									<div class="rating-text">{{rating['text']}}</div>
 									<div class="recommend-list">
