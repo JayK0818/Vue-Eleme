@@ -80,3 +80,8 @@ configureWebpack:{
 	报错:
 	Unable to preventDefault inside passive event listener due to target being treated as passive.
 [报错原因](https://blog.csdn.net/lijingshan34/article/details/88350456)
+
+	报错：
+	$listeners is readonly.
+	$attrs is readonly.
+[报错原因](https://github.com/vuejs/vue/issues/6698)

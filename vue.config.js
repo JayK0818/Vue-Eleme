@@ -33,7 +33,7 @@ module.exports = {
 	configureWebpack:{
 		resolve:{
 			alias:{
-				'@ant-design/icons/lib/dist$':resolve('src/common/js/icon.js')
+				'@ant-design/icons/lib/dist$':resolve('src/common/js/icon.js'),
 			}
 		},
 		plugins:[
