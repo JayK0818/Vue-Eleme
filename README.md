@@ -85,3 +85,9 @@ configureWebpack:{
 	$listeners is readonly.
 	$attrs is readonly.
 [报错原因](https://github.com/vuejs/vue/issues/6698)
+
+	要实现的功能：
+		1. 详情页骨架屏
+		2. 图片懒加载
+		3. 小球动画
+		4. 左侧导航栏点击时导航栏无动画,右侧内容滚动有动画

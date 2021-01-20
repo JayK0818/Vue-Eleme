@@ -41,6 +41,19 @@
 		<transition name="cart-mask">
 			<div class="cart-list-mask" v-show="show_detail" @click.stop="toggle_cart_detail"></div>
 		</transition>
+		<div class="ball-container">
+			<div v-for="(ball,index) in balls" :key="'ball-'+index" >
+				<transition
+					v-on:before-enter='before_drop'
+					v-on:enter='dropping'
+					v-on:after-enter="after_drop"
+				>
+					<div class="ball" v-show="ball.show">
+						<div class="inner"></div>
+					</div>
+				</transition>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -48,13 +61,24 @@
 	import {mapState, mapGetters, mapMutations} from 'vuex'
 	import {_message} from '@/components/message'
 	import BScroll from 'better-scroll'
-
+	let BALL_LENGTH = 10;
+	function create_ball(){
+		const ret = [];
+		for(let i = 0; i < BALL_LENGTH; i++){
+			ret.push({show:false})
+		}
+		return ret;
+	}
 	export default {
 		name: 'cart',
 		data() {
 			return {
-				fold: true
+				fold: true,
+				balls:create_ball()
 			}
+		},
+		created(){
+			this.drop_ball = [];
 		},
 		computed: {
 			...mapState(['cart', 'delivery_price', 'min_price']),
@@ -128,6 +152,41 @@
 						this.clear_food();
 					}
 				})
+			},
+			drop(el){
+				for(let i = 0; i < this.balls.length; i++){
+					const ball = this.balls[i];
+					if(!ball.show){
+						ball.el = el;
+						ball.show = true;
+						this.drop_ball.push(ball);
+						return
+					}
+				}
+			},
+			before_drop(el){
+				let ball = this.drop_ball[this.drop_ball.length - 1];
+				let rect = ball.el.getBoundingClientRect();
+				let x = rect.left - 28;
+				let y = -(window.innerHeight - rect.top - 28);
+				el.style.display = '';
+				el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`;
+				let inner = el.querySelector(".inner");
+				inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+			},
+			dropping(el,done){
+				this._reflow = document.body.offsetHeight;	// 让浏览器重绘
+				el.style.transform = el.style.webkitTransform = 'translate3d(0,0,0)';
+				let inner = el.querySelector(".inner");
+				inner.style.transform = inner.style.webkitTransform = 'translate3d(0,0,0)';
+				el.addEventListener('transitionend',done);
+			},
+			after_drop(el){
+				let ball = this.drop_ball.shift();
+				if(ball){
+					ball.show = false;
+					el.style.display = 'none';
+				}
 			}
 		}
 	}
@@ -139,7 +198,6 @@
 	.slide-fade-enter-active, .slide-fade-leave-active {
 		transition: all .3s;
 	}
-
 	.slide-fade-enter, .slide-fade-leave-to {
 		transform: translate3d(0, 100%, 0);
 	}
@@ -148,6 +206,21 @@
 	}
 	.cart-mask-enter,.cart-mask-leave-to{
 		opacity:0;
+	}
+	.ball-container{
+		.ball{
+			position:fixed;
+			left:28px;
+			bottom:28px;
+			transition:all .4s cubic-bezier(0.49,-0.29,0.75,0.41);
+			.inner{
+				width:16px;
+				height:16px;
+				border-radius:50%;
+				background-color:$highlight-color;
+				transition:all .4s linear;
+			}
+		}
 	}
 	.cart-wrapper {
 		.cart-list-mask {

@@ -49,7 +49,7 @@
 												</transition>
 											</div>
 											<span class="food-count" v-show="food['count']">{{food['count']}}</span>
-											<div class="add-button" @click.stop="add(food)">
+											<div class="add-button" @click.stop="add(food,$event)">
 												<a-icon type="plus-circle" theme="filled"></a-icon>
 											</div>
 										</div>
@@ -130,8 +130,9 @@
 					this.scrollY = Math.abs(Math.round(y));
 				})
 			},
-			add(food){
+			add(food,event){
 				this.add_food(food)
+				this.$emit('add',event.target.parentElement)
 			},
 			reduce(food){
 				this.reduce_food(food)

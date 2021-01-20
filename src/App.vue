@@ -4,9 +4,9 @@
 		<top-nav/>
 		<div class="content">
 			<keep-alive>
-				<router-view :seller="seller"/>
+				<router-view :seller="seller" @add="add"/>
 			</keep-alive>
-			<cart/>
+			<cart ref="cart"/>
 		</div>
   </div>
 </template>
@@ -42,6 +42,9 @@
 					this.set_delivery_price(response['deliveryPrice'])
 					this.set_min_price(response['minPrice'])
 				})
+			},
+			add(el){
+				this.$refs.cart.drop(el);
 			}
 		}
 	}

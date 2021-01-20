@@ -8,6 +8,7 @@ function resolve(dir){
 }
 
 module.exports = {
+	productionSourceMap:false,
 	devServer:{
 		before:function(app){
 			app.get("/api/goods",function(req,res) {
