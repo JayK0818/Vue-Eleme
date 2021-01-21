@@ -86,8 +86,17 @@ configureWebpack:{
 	$attrs is readonly.
 [报错原因](https://github.com/vuejs/vue/issues/6698)
 
-	要实现的功能：
-		1. 详情页骨架屏
-		2. 图片懒加载
-		3. 小球动画
-		4. 左侧导航栏点击时导航栏无动画,右侧内容滚动有动画
+	productionSourceMap:false	打包时不要生成map文件
+	
+	当使用history路由模式的时候,使用node搭建服务,防止页面刷新的时候报错,使用 koa2-connect-history-api-fallback插件
+```js
+// Koa
+const {historyApiFallback} = require('koa2-connect-history-api-fallback');
+app.use(historyApiFallback())
+
+
+// Express
+const historyApiFallback = require('connect-history-api-fallback');
+app.use(historyApiFallback())
+```
+	
