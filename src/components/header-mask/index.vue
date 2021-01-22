@@ -10,7 +10,7 @@
 				<div class="discount-details">
 					<ul class="discount-list">
 						<li v-for="(discount,index) in seller['supports']" :key="'discount-'+index" class='discount-item'>
-							<span class="discount-icon" :class='class_map[ discount["type"] ]'></span>
+							<support-icon :size="2" :type="index"/>
 							<span class="text">{{discount['description']}}</span>
 						</li>
 					</ul>
@@ -31,6 +31,7 @@
 
 <script>
 	import star from '@/components/star'
+	import SupportIcon from '@/components/support-icon'
 	export default {
 		name:'header-mask',
 		data(){
@@ -38,10 +39,7 @@
 				visible:true
 			}
 		},
-		components:{star},
-		created(){
-			this.class_map = ['decrease','discount','special','invoice','guarantee'];
-		},
+		components:{star,SupportIcon},
 		methods:{
 			close(){
 				this.$emit("close")
@@ -114,26 +112,6 @@
 					line-height:12px;
 				}
 			}
-			.discount-icon{
-				width:16px;
-				height:16px;
-				background-size:16px 16px;
-				&.decrease{
-					@include bg-image("./images/decrease_1");
-				}
-				&.discount{
-					@include bg-image("./images/discount_1");
-				}
-				&.special{
-					@include bg-image("./images/special_1");
-				}
-				&.invoice{
-					@include bg-image("./images/invoice_1");
-				}
-				&.guarantee{
-					@include bg-image("./images/guarantee_1");
-				}
-			}
 			.seller-bulletin{
 				.bulletin-text{
 					padding:0 12px ;
@@ -152,7 +130,7 @@
 		}
 	}
 	.my-fade-enter-active,.my-fade-leave-active{
-		transition:opacity .1s;
+		transition:opacity .35s;
 	}
 	.my-fade-enter,.my-fade-leave-to{
 		opacity:0;

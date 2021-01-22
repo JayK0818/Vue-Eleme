@@ -382,24 +382,28 @@
 			font-weight: 200;
 			line-height: 46px;
 			text-align: center;
+			@media screen and (max-width:320px){
+				font-size:10px;
+			}
 		}
 
 		.total-price {
 			display: inline-block;
-			width: 56px;
+			width: 70px;
 			text-align: center;
 			vertical-align: top;
 			font-weight: bold;
-			font-size: 12px;
+			font-size: 14px;
 			line-height: 46px;
 			color: rgba(255, 255, 255, .4);
 			border-right: 1px solid rgba(255, 255, 255, .1);
-
 			&.active {
 				color: $white;
 			}
+			@media screen and (max-width:320px){
+				width:60px;
+			}
 		}
-
 		.right-content {
 			height: 46px;
 			width: 100px;

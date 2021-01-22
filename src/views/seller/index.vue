@@ -35,7 +35,7 @@
 			</div>
 			<div class="supports">
 				<div v-for="(support,index) in seller['supports']" :key="'support-'+index" class="support-item">
-					<span class="icon" :class="class_map[index]"></span>
+					<support-icon :size="4" :type="index"/>
 					<span class="text">{{support['description']}}</span>
 				</div>
 			</div>
@@ -66,6 +66,7 @@
 	import BScroll from 'better-scroll'
 	const RIGHT = 6;
 	import {tip} from '@/components/tip/index.js'
+	import SupportIcon from '@/components/support-icon'
 	export default {
 		name :'seller',
 		data(){
@@ -84,14 +85,13 @@
 		created(){
 			this.scroll = null;
 			this.pic_scroll = null;
-			this.class_map = ['decrease','discount','special','invoice','guarantee']
 			this.calc_width()
 			setTimeout(() => {
 				this._init_scroll();
 				this._init_pics()
 			},0)
 		},
-		components:{star},
+		components:{star,SupportIcon},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {
@@ -123,15 +123,9 @@
 			toggle_collect(){
 				this.is_collect = !this.is_collect
 				if(this.is_collect){
-					tip({
-						success:true,
-						text:"已收藏"
-					})
+					tip({success:true,text:"已收藏"})
 				}else{
-					tip({
-						success:false,
-						text:"取消收藏"
-					})
+					tip({success:false,text:"取消收藏"})
 				}
 			},
 			calc_width(){
@@ -176,7 +170,7 @@
 			font-size:20px;
 			color:rgb(147,153,159);
 			&.active{
-				color:rgb(240,20,20);
+				color:$price-color;
 			}
 		}
 		.collection-text{
@@ -267,27 +261,6 @@
 			font-weight:200;
 			color:$font-color-1;
 			line-height:16px;
-		}
-		.icon{
-			width:16px;
-			height:16px;
-			background-size:16px 16px;
-			background-repeat:no-repeat;
-			&.decrease{
-				@include bg-image('./images/decrease_4');
-			}
-			&.discount{
-				@include bg-image("./images/discount_4");
-			}
-			&.special{
-				@include bg-image("./images/special_4");
-			}
-			&.invoice{
-				@include bg-image("./images/invoice_4");
-			}
-			&.guarantee{
-				@include bg-image('./images/guarantee_4');
-			}
 		}
 	}
 	.live-wrapper{

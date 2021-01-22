@@ -10,7 +10,9 @@
 						:class="{active:current_index == index ? true : false}"
 					>
 						<span class="menu-name">
-							<i class="menu-icon" v-if="menu['type'] > 0" :class="icon_class[menu['type']]"></i>
+							<template v-if="menu['type'] > 0">
+								<support-icon :size="3" :type="menu['type']"/>
+							</template>
 							{{menu['name']}}
 						</span>
 						<div class="type-count" v-if="type_count(menu['name']) > 0">{{type_count(menu['name'])}}</div>
@@ -67,6 +69,7 @@
 <script>
 	import loading from '@/components/loading'
 	import BScroll from 'better-scroll'
+	import SupportIcon from '@/components/support-icon'
 	import {mapMutations} from 'vuex'
 	export default {
 		name:'goods',
@@ -85,7 +88,7 @@
 			this.food_scroll = null;
 			this.menu_scroll = null;
 		},
-		components:{loading},
+		components:{loading,SupportIcon},
 		watch:{
 			scrollY(value){
 				let index = 0;
@@ -330,29 +333,6 @@
 				display:table-cell;
 				vertical-align:middle;
 				@include border-bottom-1px($border-color);
-			}
-			.menu-icon{
-				display:inline-block;
-				width:12px;
-				height:12px;
-				vertical-align:top;
-				background-size:12px 12px;
-				background-repeat:no-repeat;
-				&.descrease{
-					@include bg-image('./images/decrease_3')
-				}
-				&.discount{
-					@include bg-image("./images/discount_3")
-				}
-				&.guarantee{
-					@include bg-image("./images/guarantee_3")
-				}
-				&.special{
-					@include bg-image('./images/special_3')
-				}
-				&.invoice{
-					@include bg-image("./images/invoice_3")
-				}
 			}
 			.type-count{
 				position:absolute;

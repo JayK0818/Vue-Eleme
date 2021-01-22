@@ -14,7 +14,8 @@
 					<span class='time'>{{seller['deliveryTime']}}分钟送达</span>
 				</p>
 				<div class="discount" v-if="seller['supports']">
-					<div class="discount-icon"></div>
+					<!-- <support-icon :size="1" :type='0'></support-icon> -->
+					<support-icon :size="1" :type='0'></support-icon>
 					<span>{{seller['supports'][0]['description']}}</span>
 				</div>
 				<div class="discount-count" @click.stop="show_masker">
@@ -33,6 +34,7 @@
 
 <script>
 	import {masker} from '@/components/header-mask/index.js';
+	import SupportIcon from '@/components/support-icon';
 	export default {
 		name:'v-header',
 		props:{
@@ -45,6 +47,9 @@
 			show_masker(){
 				masker(this.seller);
 			}
+		},
+		components:{
+			SupportIcon
 		}
 	}
 </script>
@@ -126,16 +131,10 @@
 				line-height:12px;
 			}
 			.discount{
-				padding-top:10px;
-				height:12px;
+				margin-top:10px;
+				height:16px;
 				display:flex;
-				aling-items:center;
-				.discount-icon{
-					width:16px;
-					height:16px;
-					background-size:16px 16px;
-					@include bg-image('./images/decrease_1')
-				}
+				align-items:center;
 				span{
 					font-size:12px;
 					line-height:16px;

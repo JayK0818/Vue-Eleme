@@ -167,13 +167,13 @@
 	@import '../../common/css/mixin.scss';
 	@import '../../common/css/variable.scss';
 	.slide-enter-active,.slide-leave-active{
-		transition:transform .3s;
+		transition:all .35s;
 	}
 	.slide-enter,.slide-leave-to{
 		transform:translate3d(100%,0,0);
 	}
 	.cart-fade-enter-active,.cart-fade-leave-active{
-		transition:all .15s;
+		transition:all .35s;
 	}
 	.cart-fade-enter,.cart-fade-leave-to{
 		opacity:0;
