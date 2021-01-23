@@ -49,14 +49,23 @@
 			background-color:#ffffff;
 			border-radius:6px;
 			box-shadow: 0 2px 8px rgba(0,0,0,.09);
+			@media screen and (max-width:320px){
+				width:200px;
+				height:120px;
+			}
 		}
 		.content{
 			text-align:center;
 			line-height:100px;
+			@media screen and (max-width:320px){
+				line-height:80px;
+				font-size:14px;
+			}
 		}
 		.footer-button{
 			display:flex;
 			height:40px;
+			font-size:14px;
 			@include border-top-1px(#e8e8e8);
 			.cancel-text,.confirm-text{
 				flex:1;

@@ -6,7 +6,7 @@
 			<keep-alive>
 				<router-view :seller="seller" @add="add"/>
 			</keep-alive>
-			<cart ref="cart"/>
+			<cart ref="cart" :delivery_price="delivery_price" :min_price='min_price'/>
 		</div>
   </div>
 </template>
@@ -15,12 +15,13 @@
 	import nav from '@/components/top-nav'
 	import header from '@/components/header'
 	import cart from '@/components/cart'
-	import {mapMutations} from 'vuex'
 	export default {
 		name:"app",
 		data() {
 			return {
-				seller:{}
+				seller:{},
+				delivery_price:0,
+				min_price:0
 			}
 		},
 		created(){
@@ -32,15 +33,14 @@
 			cart
 		},
 		methods:{
-			...mapMutations(['set_delivery_price','set_min_price']),
 			get_seller(){
 				this.axios({
 					url:'/api/seller',
 					method:'get'
 				}).then(response => {
 					this.seller = response;
-					this.set_delivery_price(response['deliveryPrice'])
-					this.set_min_price(response['minPrice'])
+					this.delivery_price = response['deliveryPrice']
+					this.min_price = response['minPrice']
 				})
 			},
 			add(el){

@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 import Masker from './index.vue';
 export const masker = (function(Vue){
 	return function(options) {

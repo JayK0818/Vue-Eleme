@@ -19,8 +19,10 @@
 					</li>
 				</ul>
 			</div>
-			<div class="goods-wrapper" ref='goods_list'>
-				<ul class="goods-list">
+			<div class="goods-wrapper">
+				<div class="fixed-title" v-show="show_fixed_title">{{goods_list[current_index]['name']}}</div>
+				<section class="goods-section" ref='goods_list'>
+					<ul class="goods-list">
 						<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container" ref="food_container">
 							<div class="food-type">{{good['name']}}</div>
 							<ul class="food-list">
@@ -60,6 +62,7 @@
 							</ul>
 						</li>
 					</ul>
+				</section>
 			</div>
 			<router-view/>
 		</template>
@@ -79,7 +82,8 @@
 				loading:true,
 				scroll_height:[],
 				scrollY:0,
-				current_index:0
+				current_index:0,
+				show_fixed_title:true
 			}
 		},
 		created(){
@@ -128,9 +132,11 @@
 				this.food_scroll.on('scroll',({y}) => {
 					if(y > 0){
 						this.scrollY = 0; 
-						return;
+						this.show_fixed_title = false;
+					}else{
+						this.scrollY = Math.abs(Math.round(y));
+						this.show_fixed_title = true;
 					}
-					this.scrollY = Math.abs(Math.round(y));
 				})
 			},
 			add(food,event){
@@ -181,6 +187,15 @@
 <style lang="scss" scoped>
 	@import '../../common/css/mixin.scss';
 	@import '../../common/css/variable.scss';
+	@mixin type-style {
+		padding-left:14px;
+		height:26px;
+		font-size:12px;
+		color:$font-color-3;
+		line-height:26px;
+		background-color:#f3f5f7;
+		border-left:2px solid #d9dde1;
+	}
 	.slide-fade-enter-active,.slide-fade-leave-active{
 		transition:all .45s;
 	}
@@ -205,7 +220,20 @@
 			height:100%;
 		}
 		.goods-wrapper{
-			overflow:auto;
+			position:relative;
+			.fixed-title{
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				@include type-style;
+				z-index:210;
+			}
+			.goods-section{
+				width:100%;
+				height:100%;
+				overflow:auto;
+			}
 			.food-list{
 				padding:0 18px;
 			}
@@ -218,13 +246,7 @@
 				}
 			}
 			.food-type{
-				padding-left:14px;
-				height:26px;
-				font-size:12px;
-				color:$font-color-3;
-				line-height:26px;
-				background-color:#f3f5f7;
-				border-left:2px solid #d9dde1;
+				@include type-style;
 			}
 			.food-icon{
 				flex:0 0 58px;

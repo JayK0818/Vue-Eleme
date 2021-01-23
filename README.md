@@ -84,6 +84,7 @@ configureWebpack:{
 	报错：
 	$listeners is readonly.
 	$attrs is readonly.
+		调用的时候不是同一个 vue。
 [报错原因](https://github.com/vuejs/vue/issues/6698)
 
 	productionSourceMap:false	打包时不要生成map文件
@@ -99,4 +100,5 @@ app.use(historyApiFallback())
 const historyApiFallback = require('connect-history-api-fallback');
 app.use(historyApiFallback())
 ```
+	
 	

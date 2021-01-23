@@ -3,7 +3,7 @@ import App from './App.vue'
 import './common/css/reset.scss'
 import router from './router'
 import store from './store'
-import axios from './common/js/api';
+import axios from './api';
 import {Icon} from 'ant-design-vue'
 import FastClick from 'fastclick';
 FastClick.attach(document.body);

@@ -31,9 +31,9 @@
 			display:block;
 			color:#314659;
 			font-size:14px;
-		}
-		a.active{
-			color:$highlight-color;
+			&.active{
+				color:$highlight-color;
+			}
 		}
 	}
 </style>

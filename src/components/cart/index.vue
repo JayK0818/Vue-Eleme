@@ -80,8 +80,18 @@
 		created(){
 			this.drop_ball = [];
 		},
+		props:{
+			delivery_price:{
+				type:Number,
+				required:true
+			},
+			min_price:{
+				type:Number,
+				required:true
+			}
+		},
 		computed: {
-			...mapState(['cart', 'delivery_price', 'min_price']),
+			...mapState(['cart']),
 			...mapGetters(['total_price', 'total_count']),
 			total_price_text() {
 				let text = ""
