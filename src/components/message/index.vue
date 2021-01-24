@@ -44,8 +44,8 @@
 			left:50%;
 			top:50%;
 			transform:translate(-50%,-50%);
-			width:240px;
-			height:140px;
+			width:220px;
+			height:130px;
 			background-color:#ffffff;
 			border-radius:6px;
 			box-shadow: 0 2px 8px rgba(0,0,0,.09);
@@ -56,7 +56,7 @@
 		}
 		.content{
 			text-align:center;
-			line-height:100px;
+			line-height:90px;
 			@media screen and (max-width:320px){
 				line-height:80px;
 				font-size:14px;

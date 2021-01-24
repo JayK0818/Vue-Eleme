@@ -117,9 +117,11 @@
 			},
 			add_cart(){
 				this.add_food(this.detail);
+				this.$emit('add',event.target);
 			},
-			add(){
+			add(event){
 				this.add_food(this.detail)
+				this.$emit('add',event.target.parentElement);
 			},
 			need_show(type,text){	// 如果要显示内容但是又没有内容 则返回false
 				if(this.only_text && !text){
@@ -133,7 +135,6 @@
 			},
 			reduce(){
 				let count = this.detail['count'];
-				console.log(count);
 				if(count == 1){
 					_message({
 						content:"确定删除当前商品吗?",

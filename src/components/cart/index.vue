@@ -30,7 +30,7 @@
 									<span class="price">{{food['price']}}</span>
 									<a-icon type="minus-circle" theme="filled" class='icon' @click.stop="reduce(food)"></a-icon>
 									<span class="count">{{food['count']}}</span>
-									<a-icon type="plus-circle" theme="filled" class='icon' @click.stop="add(food['id'])"></a-icon>
+									<a-icon type="plus-circle" theme="filled" class='icon' @click.stop="add(food['id'],$event)"></a-icon>
 								</div>
 							</li>
 						</template>
@@ -146,8 +146,10 @@
 					this.reduce_food({id:food['id']})
 				}
 			},
-			add(id) {
+			add(id,event) {
 				this.add_food({id})
+				let target = event.target.parentElement;
+				this.drop(target);
 			},
 			toggle_cart_detail() {
 				if (!this.total_count) return;
@@ -222,6 +224,7 @@
 			position:fixed;
 			left:28px;
 			bottom:28px;
+			z-index:400;
 			transition:all .4s cubic-bezier(0.49,-0.29,0.75,0.41);
 			.inner{
 				width:16px;

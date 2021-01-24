@@ -64,7 +64,7 @@
 					</ul>
 				</section>
 			</div>
-			<router-view/>
+			<router-view @add="add_detail_food"/>
 		</template>
 	</div>
 </template>
@@ -83,7 +83,6 @@
 				loading:true,
 				scroll_height:[],
 				scrollY:0,
-				current_index:0,
 				show_fixed_title:true,
 				last_child_height:0,
 				diff:0,
@@ -98,18 +97,6 @@
 		},
 		components:{loading,SupportIcon},
 		watch:{
-			scrollY(value){
-				for(let i = 0, length = this.scroll_height.length - 1; i < length; i++){
-					let height1 = this.scroll_height[i];
-					let height2 = this.scroll_height[i+1];
-					this.diff = height2 - value;
-					if(value >= height1 && value < height2){
-						this.current_index = i;
-						return;
-					}
-				}
-				this.current_index = this.scroll_height - 2;	// 滚动的高度大于最后一个元素的高度时
-			},
 			diff(value){
 				let fix_top = (value >= 0 && value < TITLE_HEIGHT) ? (TITLE_HEIGHT - value) : 0;
 				if(this.fixed_top == fix_top) return;	// diff是一直变化的,防止一直修改dom
@@ -122,6 +109,17 @@
 			}
 		},
 		computed:{
+			current_index(){
+				for(let i = 0, length = this.scroll_height.length - 1; i < length; i++){
+					let height_1 = this.scroll_height[i];
+					let height_2 = this.scroll_height[i+1];
+					this.calc_diffY(height_2);
+					if(this.scrollY >= height_1 && this.scrollY < height_2){
+						return i;
+					}
+				}
+				return 0;	
+			},
 			type_count(){
 				return function(name){
 					let count = 0;
@@ -137,6 +135,9 @@
 		},
 		methods:{
 			...mapMutations(['add_food','reduce_food','click_detail']),
+			calc_diffY(h){
+				this.diff = h - this.scrollY;
+			},
 			_initial_scroll(){
 				this.food_scroll = new BScroll(this.$refs.goods_list,{
 					probeType:3,
@@ -149,8 +150,8 @@
 				this.food_scroll.on('scroll',({y}) => {
 					// 左侧导航条和右侧内容相关联,当y>0的时候,向下拉,肯定是对应第一个导航栏.
 					if(y > 0){
-						this.current_index = 0;
 						this.show_fixed_title = false;
+						return;
 					}else{
 						this.scrollY = Math.abs(Math.round(y));
 						this.show_fixed_title = true;
@@ -159,7 +160,7 @@
 			},
 			add(food,event){
 				this.add_food(food)
-				this.$emit('add',event.target.parentElement)
+				this.$emit('add',event.target.parentElement);	// 商品列表页面抛出点击按钮元素
 			},
 			reduce(food){
 				this.reduce_food(food)
@@ -198,8 +199,11 @@
 			select_menu(index){
 				let aLi = document.querySelectorAll(".food-container");
 				let ele = aLi[index];
-				this.food_scroll.scrollToElement(ele);
-			}
+				this.food_scroll.scrollToElement(ele,1000);
+			},
+			add_detail_food(target){
+				this.$emit('add',target);
+			},
 		}
 	}
 </script>

@@ -5,6 +5,7 @@ Vue.use(VueRouter)
 const routes = [
 	{
 		path:'/goods',
+		name:'goods',
 		component:() => import("@/views/goods"),
 		children:[
 			{
@@ -15,10 +16,12 @@ const routes = [
 	},
 	{
 		path:"/ratings",
+		name:"ratings",
 		component:() => import("@/views/ratings")
 	},
 	{
 		path:"/seller",
+		name:'seller',
 		component:() => import("@/views/seller")
 	},
 	{
