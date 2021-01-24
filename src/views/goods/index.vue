@@ -20,7 +20,7 @@
 				</ul>
 			</div>
 			<div class="goods-wrapper">
-				<div class="fixed-title" v-show="show_fixed_title">{{goods_list[current_index]['name']}}</div>
+				<div class="fixed-title" v-show="show_fixed_title" ref="fixed_title">{{goods_list[current_index]['name']}}</div>
 				<section class="goods-section" ref='goods_list'>
 					<ul class="goods-list">
 						<li v-for="(good,index) in goods_list" :key="'good-'+index" class="food-container" ref="food_container">
@@ -74,6 +74,7 @@
 	import BScroll from 'better-scroll'
 	import SupportIcon from '@/components/support-icon'
 	import {mapMutations} from 'vuex'
+	const TITLE_HEIGHT = 26;
 	export default {
 		name:'goods',
 		data(){
@@ -83,7 +84,10 @@
 				scroll_height:[],
 				scrollY:0,
 				current_index:0,
-				show_fixed_title:true
+				show_fixed_title:true,
+				last_child_height:0,
+				diff:0,
+				fixed_top:0
 			}
 		},
 		created(){
@@ -95,13 +99,26 @@
 		components:{loading,SupportIcon},
 		watch:{
 			scrollY(value){
-				let index = 0;
 				for(let i = 0, length = this.scroll_height.length - 1; i < length; i++){
-					if( value >= this.scroll_height[i] && value < this.scroll_height[i+1] ){
-						index = i;
+					let height1 = this.scroll_height[i];
+					let height2 = this.scroll_height[i+1];
+					this.diff = height2 - value;
+					if(value >= height1 && value < height2){
+						this.current_index = i;
+						return;
 					}
 				}
-				this.current_index = index;
+				this.current_index = this.scroll_height - 2;	// 滚动的高度大于最后一个元素的高度时
+			},
+			diff(value){
+				let fix_top = (value >= 0 && value < TITLE_HEIGHT) ? (TITLE_HEIGHT - value) : 0;
+				if(this.fixed_top == fix_top) return;	// diff是一直变化的,防止一直修改dom
+				this.fixed_top = fix_top;	
+				this.$nextTick(() => {
+					let title = this.$refs.fixed_title;
+					title.style.transform = `translate3d(0,-${fix_top}px,0)`;
+					title.style.webkitTransform = `translate3d(0,-${fix_top}px,0)`;
+				})
 			}
 		},
 		computed:{
@@ -130,8 +147,9 @@
 					click:true
 				})
 				this.food_scroll.on('scroll',({y}) => {
+					// 左侧导航条和右侧内容相关联,当y>0的时候,向下拉,肯定是对应第一个导航栏.
 					if(y > 0){
-						this.scrollY = 0; 
+						this.current_index = 0;
 						this.show_fixed_title = false;
 					}else{
 						this.scrollY = Math.abs(Math.round(y));
@@ -171,9 +189,11 @@
 			cacl_top(){
 				let container = this.$refs.food_container, array = [];
 				container.forEach(function(el){array.push(el.offsetTop)})
-				let last_child_height = container[container.length-1].clientHeight + container[container.length-1].offsetTop;
-				array.push(last_child_height)
+				let last_child_height = container[container.length-1].clientHeight;
+				let last_height = last_child_height + container[container.length-1].offsetTop;
+				array.push(last_height)
 				this.scroll_height = array;
+				this.last_child_height = last_child_height;
 			},
 			select_menu(index){
 				let aLi = document.querySelectorAll(".food-container");
@@ -225,9 +245,12 @@
 				position:absolute;
 				top:0;
 				left:0;
-				right:0;
+				width:100%;
 				@include type-style;
 				z-index:210;
+				@media screen and (min-width:750px){
+					width:calc(100% - 15px);
+				}
 			}
 			.goods-section{
 				width:100%;
