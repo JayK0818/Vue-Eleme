@@ -45,9 +45,9 @@
 						@toggle="toggle"
 						@switch="switch_rating"
 					/>
-					<div class="rating-list" v-if="detail['ratings'].length">
+					<div class="rating-list" v-if="filter_ratings.length">
 						<ul>
-							<li class="rating-item" v-for="(rating,index) in detail['ratings']" :key="'rating-'+index"  v-show="need_show(rating['rateType'],rating['text'])">
+							<li class="rating-item" v-for="(rating,index) in filter_ratings" :key="'rating-'+index">
 								<div class="rating-time">{{rating['rateTime'] | format}}</div>
 								<div class="rating-content">
 									<a-icon type="like" class='icon like-icon' theme="filled" v-if="rating['rateType'] == 0"/>
@@ -96,6 +96,18 @@
 		},
 		computed:{
 			...mapState(['detail']),
+			filter_ratings(){
+				let ret = [];
+				this.detail['ratings'].forEach(rating => {
+					if(this.only_text && !rating['text']) {
+						return;
+					}
+					if( this.current_type == ALL || rating['rateType'] == this.current_type ){
+						ret.push(rating);
+					}
+				})
+				return ret;
+			}
 		},
 		filters:{
 			format(value){

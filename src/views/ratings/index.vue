@@ -40,8 +40,8 @@
 					@switch="switch_rating"
 				/>
 				<div class="rating-list">
-					<ul>
-						<template v-for="(rating,index) in rating_list">
+					<ul v-if="filter_rating.length">
+						<template v-for="(rating,index) in filter_rating">
 							<li :key="'rating-'+index" class="rating-item" v-show="need_show(rating['rateType'],rating['text'])">
 								<div class="avatar">
 									<img :src="rating['avatar']" width="28" height="28">
@@ -67,6 +67,7 @@
 							</li>
 						</template>
 					</ul>
+					<a-empty v-else description='暂无评价'/>
 				</div>
 			</div>
 		</div>
@@ -79,7 +80,7 @@
 	import loading from '@/components/loading'
 	import RatingSelect from '@/components/rating-select'
 	import {format_date} from '@/common/js/util'
-	import {Tag} from 'ant-design-vue'
+	import {Tag,Empty} from 'ant-design-vue'
 	import split from '@/components/split'
 	const ALL = 2;
 	export default {
@@ -108,7 +109,26 @@
 				required:true
 			}
 		},
-		components:{star,loading,RatingSelect,[Tag.name]:Tag,split},
+		components:{
+			star,loading,RatingSelect,
+			[Tag.name]:Tag,
+			[Empty.name]:Empty,
+			split
+		},
+		computed:{
+			filter_rating(){
+				let ret = [];
+				this.rating_list.forEach(rating => {
+					if(this.only_text && !rating['text']){
+						return;
+					}
+					if(this.current_type == rating['rateType'] || this.current_type == ALL){
+						ret.push(rating);
+					}
+				})
+				return ret;
+			}
+		},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {
