@@ -199,7 +199,7 @@
 			select_menu(index){
 				let aLi = document.querySelectorAll(".food-container");
 				let ele = aLi[index];
-				this.food_scroll.scrollToElement(ele,1000);
+				this.food_scroll.scrollToElement(ele);
 			},
 			add_detail_food(target){
 				this.$emit('add',target);

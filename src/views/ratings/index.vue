@@ -29,7 +29,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="block"></div>
+			<split/>
 			<div class="rating-container">
 				<rating-select
 					title=""
@@ -80,6 +80,7 @@
 	import RatingSelect from '@/components/rating-select'
 	import {format_date} from '@/common/js/util'
 	import {Tag} from 'ant-design-vue'
+	import split from '@/components/split'
 	const ALL = 2;
 	export default {
 		name:'ratings',
@@ -107,7 +108,7 @@
 				required:true
 			}
 		},
-		components:{star,loading,RatingSelect,[Tag.name]:Tag},
+		components:{star,loading,RatingSelect,[Tag.name]:Tag,split},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {
@@ -163,12 +164,6 @@
 		width:100%;
 		bottom:46px;
 		overflow:auto;
-	}
-	.block{
-		height:16px;
-		background-color:#f3f5f7;
-		border-top:1px solid rgba(7,17,27,.1);
-		border-bottom:1px solid rgba(7,17,27,.1);
 	}
 	.overview{
 		display:flex;

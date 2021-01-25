@@ -29,12 +29,12 @@
 						<a-icon type="plus-circle" theme='filled' @click.stop="add"/>
 					</div>
 				</div>
-				<div class="line-block" v-if="detail['description']"></div>
+				<split v-if="detail['description']"/>
 				<div class="food-introduce" v-if="detail['description']">
 					<div class="introduce-title">商品介绍</div>
 					<p class="introduce-description">{{detail['description']}}</p>
 				</div>
-				<div class="line-block"></div>
+				<split/>
 				<div class="rating-wrapper" v-if="detail['ratings']">
 					<rating-select
 						title='商品评价'
@@ -75,6 +75,7 @@
 	import RatingSelect from '@/components/rating-select'
 	import {Empty} from 'ant-design-vue'
 	import {format_date} from '@/common/js/util'
+	import split from '@/components/split'
 	const ALL = 2;
 	export default {
 		name:'detail',
@@ -101,7 +102,7 @@
 				return format_date(value,'yyyy-MM-dd hh:mm');
 			}
 		},
-		components:{RatingSelect,[Empty.name]:Empty},
+		components:{RatingSelect,[Empty.name]:Empty,split},
 		methods:{
 			...mapMutations(['add_food','reduce_food','clear_food']),
 			_init_scroll(){
@@ -277,13 +278,6 @@
 					line-height:18px;
 				}
 			}
-		}
-		.line-block{
-			height:16px;
-			background:#f3f5f7;
-			width:100%;
-			@include border-top-1px($border-color);
-			@include border-bottom-1px($border-color);
 		}
 		.food-introduce{
 			padding:18px;

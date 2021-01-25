@@ -13,7 +13,7 @@
 				</div>
 				<div class="delivery-price">另需配送费¥4元</div>
 			</div>
-			<div class="right-content" :class="{active:total_price < min_price ? false : true }">{{total_price_text}}</div>
+			<div class="right-content" :class="{active:total_price < min_price ? false : true }" @click.stop="settlement">{{total_price_text}}</div>
 		</div>
 		<transition name="slide-fade">
 			<div class="cart-detail-content" v-show="show_detail">
@@ -60,6 +60,7 @@
 <script>
 	import {mapState, mapGetters, mapMutations} from 'vuex'
 	import {_message} from '@/components/message'
+	import {tip} from '@/components/tip'
 	import BScroll from 'better-scroll'
 	let BALL_LENGTH = 10;
 	function create_ball(){
@@ -79,6 +80,7 @@
 		},
 		created(){
 			this.drop_ball = [];
+			this.timer = null;
 		},
 		props:{
 			delivery_price:{
@@ -199,6 +201,21 @@
 					ball.show = false;
 					el.style.display = 'none';
 				}
+			},
+			settlement(){
+				if(this.total_price < this.min_price) return;
+				tip({
+					success:true,
+					text:'结算成功'
+				})
+				this.timer = setTimeout(() => {
+					this.clear_food();
+				},1200);
+			}
+		},
+		beforeDestory(){
+			if(this.timer) {
+				clearTimeout(this.timer);
 			}
 		}
 	}

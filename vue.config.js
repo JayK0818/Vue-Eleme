@@ -1,6 +1,6 @@
 const data = require('./data.json');
 const path = require("path");
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const webpack = require('webpack');
 
 function resolve(dir){

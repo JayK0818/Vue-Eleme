@@ -28,7 +28,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="block"></div>
+			<split/>
 			<div class="bulletin-wrapper">
 				<div class="title">公告与活动</div>
 				<div class="text">{{seller['bulletin']}}</div>
@@ -39,7 +39,7 @@
 					<span class="text">{{support['description']}}</span>
 				</div>
 			</div>
-			<div class="block"></div>
+			<split/>
 			<div class="live-wrapper">
 				<div class="title">商家实景</div>
 				<div class="pic-container" ref='pic_container'>
@@ -50,7 +50,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="block"></div>
+			<split/>
 			<div class="seller-wrapper">
 				<div class="title">商家信息</div>
 			</div>
@@ -67,6 +67,7 @@
 	const RIGHT = 6;
 	import {tip} from '@/components/tip/index.js'
 	import SupportIcon from '@/components/support-icon'
+	import split from '@/components/split'
 	export default {
 		name :'seller',
 		data(){
@@ -91,7 +92,7 @@
 				this._init_pics()
 			},0)
 		},
-		components:{star,SupportIcon},
+		components:{star,SupportIcon,split},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {
@@ -224,12 +225,6 @@
 				font-size:10px;
 			}
 		}
-	}
-	.block{
-		background-color:#f3f5f7;
-		height:16px;
-		@include border-top-1px($border-color);
-		@include border-bottom-1px($border-color);
 	}
 	.bulletin-wrapper,.live-wrapper,.seller-wrapper{
 		.title{
