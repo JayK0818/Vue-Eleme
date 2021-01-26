@@ -69,9 +69,31 @@ configureWebpack:{
 [how to optimize-momentjs-with-webpack](https://github.com/jmblog/how-to-optimize-momentjs-with-webpack)
 	
 	Sticky footer布局
-	border-1px
-	fastclick
 	
+	border-1px
+	-webkit-device-pixel-ratio:是一个非标准的布尔类型CSS媒体类型,是标准 resolution媒体类型的一个替代方案
+```scss
+@mixin bordr-bottom-1px($color){
+	position:relative;
+	&:after{
+		content:"";
+		display:block;
+		position:absolute;
+		left:0;
+		right:0;
+		bottom:0;
+		border-bottom:1px solid $color;
+	}
+	@media screen and (min-resolution:2dppx) {
+		&:after{
+			transform:translateY(0.5);
+			-webkit-transform:translateY(0.5);
+		}
+	}
+}
+```
+	
+	fastclick
 	
 	报错:
 	show_detail computed property vue/no-side-effects-in-computed-properties

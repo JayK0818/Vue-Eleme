@@ -9,13 +9,13 @@
 		width:100%;
 		border-bottom:1px solid $color;
 	}
-	@media screen and (-webkit-min-device-pixel-ratio:2), (min-device-pixel-ratio:2){
+	@media screen and (min-resolution:2dppx){
 		&:after{
 			transform:scaleY(0.5);
 			-webkit-transform:scaleY(0.5);
 		}
 	}
-	@media screen and (-webkit-min-device-pixel-ratio:3), (min-device-pixel-ratio:3){
+	@media screen and (min-resolution:3dppx){
 		&:after{
 			transform:scaleY(0.33);
 			-webkit-transform:scaleY(0.33);
@@ -34,13 +34,13 @@
 		width:100%;
 		border-top:1px solid $color;
 	}
-	@media screen and (-webkit-min-device-pixel-ratio:2), (min-device-pixel-ratio:2){
+	@media screen and (min-resolution:2dppx){
 		&:before{
 			transform:scaleY(0.5);
 			-webkit-transform:scaleY(0.5);
 		}
 	}
-	@media screen and (-webkit-min-device-pixel-ratio:3), (min-device-pixel-ratio:3){
+	@media screen and (min-resolution:3dppx){
 		&:before{
 			transform:scaleY(0.33);
 			-webkit-transform:scaleY(0.33);
@@ -60,13 +60,13 @@
 		height:100%;
 		border-right:1px solid $color;
 	}
-	@media screen and (-webkit-min-device-pixel-ratio:2), (min-device-pixel-ratio:2){
+	@media screen and (min-resolution:2dppx){
 		&:after{
 			transform:scaleX(0.5);
 			-webkit-transform:scaleX(0.5);
 		}
 	}
-	@media screen and (-webkit-min-device-pixel-ratio:3), (min-device-pixel-ratio:3){
+	@media screen and (min-resolution:3dppx){
 		&:after{
 			transform:scaleX(0.33);
 			-webkit-transform:scaleX(0.33);
@@ -83,7 +83,7 @@
 
 @mixin bg-image($url){
 	background-image:url($url + '@2x.png');
-	@media screen and (-webkit-min-device-pixel-ratio:3), (min-device-pixel-ratio:3){
+	@media screen and (min-resolution:3dppx){
 		background-image:url($url + '@3x.png');
 	}
 }

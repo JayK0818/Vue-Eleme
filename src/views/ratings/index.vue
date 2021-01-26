@@ -42,7 +42,7 @@
 				<div class="rating-list">
 					<ul v-if="filter_rating.length">
 						<template v-for="(rating,index) in filter_rating">
-							<li :key="'rating-'+index" class="rating-item" v-show="need_show(rating['rateType'],rating['text'])">
+							<li :key="'rating-'+index" class="rating-item">
 								<div class="avatar">
 									<img :src="rating['avatar']" width="28" height="28">
 								</div>

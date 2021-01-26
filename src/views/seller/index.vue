@@ -156,7 +156,6 @@
 	.overview{
 		padding:18px;
 		.top{
-			position:relative;
 			padding-bottom:18px;
 			@include border-bottom-1px($border-color);
 		}
