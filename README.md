@@ -92,8 +92,17 @@ configureWebpack:{
 	}
 }
 ```
-	
 	fastclick
+	FastClick is a simple,easy to use library for eliminating the 300ms delay between a physical tap and the firing of a
+	click event on mobile browsers.The aim is to make your application feel less laggy and more responsive while avoiding
+	any interference with your current logic.
+```js
+if('addEventListener' in document){
+	document.addEventListener('DOMContentLoaded',function(){
+		FastClick.attach(document.body);
+	},)
+}
+```
 	
 	报错:
 	show_detail computed property vue/no-side-effects-in-computed-properties
@@ -122,5 +131,16 @@ app.use(historyApiFallback())
 const historyApiFallback = require('connect-history-api-fallback');
 app.use(historyApiFallback())
 ```
-	
+
+	项目页面及功能:
+		页面: 商品页面/评价页面/商家页面/商品详情页/头部浮层/购物车列表组件
+		功能:
+			1. 菜单列表和商品列表联动滚动
+			2. 加入购物车小球抛物线动画
+			3. 商品加入购物车及删除
+			4. 对弹层类提示框使用Vue.extend封装
+			5. start和icon组件封装
+			6. 评价筛选和时间格式化函数
+			7. 商家收藏功能
+
 	

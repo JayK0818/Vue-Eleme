@@ -31,15 +31,9 @@ module.exports = {
 			})
 		}
 	},
-	configureWebpack:{
-		resolve:{
-			alias:{
-				'@ant-design/icons/lib/dist$':resolve('src/common/js/icon.js'),
-			}
-		},
-		plugins:[
-			// new BundleAnalyzerPlugin(),
-			new webpack.ContextReplacementPlugin(/moment[/\\]locale$/,/ja|it/)
-		]
+	chainWebpack(config){
+		config.resolve.alias.set('@ant-design/icons/lib/dist$',resolve('src/common/js/icon.js'))
+		config.plugin('context')
+		.use(webpack.ContextReplacementPlugin,[/moment[/\\]locale$/,/zh-cn/])
 	}
 }
