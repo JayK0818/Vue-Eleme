@@ -135,20 +135,23 @@ app.use(historyApiFallback())
 ```
 
 项目页面及功能:
-	页面: 商品页面/评价页面/商家页面/商品详情页/头部浮层/购物车列表组件
-	功能:
-		1. 菜单列表和商品列表联动滚动
-		2. 加入购物车小球抛物线动画
-		3. 商品加入购物车及删除
-		4. 对弹层类提示框使用Vue.extend封装
-		5. start和icon组件封装
-		6. 评价筛选和时间格式化函数
-		7. 商家收藏功能
+
+ 页面: 
+ 商品页面/评价页面/商家页面/商品详情页/头部浮层/购物车列表组件
+
+ 功能:
+1. 菜单列表和商品列表联动滚动
+2. 加入购物车小球抛物线动画
+3. 商品加入购物车及删除
+4. 对弹层类提示框使用Vue.extend封装
+5. start和icon组件封装
+6. 评价筛选和时间格式化函数
+7. 商家收藏功能
 		
 ![1](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
 ![2](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
 ![3](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
 ![4](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
 		
-	该项目主要功能及后台数据根据慕课网课程,Vue.js2.5+cube-ui重构饿了么App。由黄轶老师主讲
+该项目主要功能及后台数据根据慕课网课程,Vue.js2.5+cube-ui重构饿了么App。由黄轶老师主讲
 [课程链接](https://coding.imooc.com/class/74.html)
