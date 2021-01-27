@@ -12,16 +12,16 @@ axios.intereptors.response.use(function(response){
 	return response;	// 可以在请求成功时直接返回数据,这样不用在每个组件判断code 
 })
 ```
-	ant-design-vue组件和icon按需引入:
-		yarn add babel-plugin-import --dev
+    ant-design-vue组件和icon按需引入:
+	    yarn add babel-plugin-import --dev
 ```js
 // babel.config.js
 {
 	"plugins": [
-     "transform-vue-jsx",
-     "transform-runtime",
-     ["import", { "libraryName": "ant-design-vue", "libraryDirectory": "es", "style": "css" }]
-   ]
+		"transform-vue-jsx",
+		"transform-runtime",
+		["import", { "libraryName": "ant-design-vue", "libraryDirectory": "es", "style": "css" }]
+	]
 }
 ```
 ```js
@@ -93,6 +93,7 @@ configureWebpack:{
 }
 ```
 	fastclick
+	
 	FastClick is a simple,easy to use library for eliminating the 300ms delay between a physical tap and the firing of a
 	click event on mobile browsers.The aim is to make your application feel less laggy and more responsive while avoiding
 	any interference with your current logic.
@@ -100,26 +101,26 @@ configureWebpack:{
 if('addEventListener' in document){
 	document.addEventListener('DOMContentLoaded',function(){
 		FastClick.attach(document.body);
-	},)
+	},false)
 }
 ```
 	
 	报错:
-	show_detail computed property vue/no-side-effects-in-computed-properties
-	在ESLint的情况下，computed中不能直接修改data中的数据,可以在methods中修改,然后在computed中调用该方法。
-	
+		show_detail computed property vue/no-side-effects-in-computed-properties
+		在ESLint的情况下，computed中不能直接修改data中的数据,可以在methods中修改,然后在computed中调用该方法。
+
 	报错:
-	Unable to preventDefault inside passive event listener due to target being treated as passive.
+		Unable to preventDefault inside passive event listener due to target being treated as passive.
 [报错原因](https://blog.csdn.net/lijingshan34/article/details/88350456)
 
 	报错：
 	$listeners is readonly.
 	$attrs is readonly.
-		调用的时候不是同一个 vue。
+	  调用的时候不是同一个 vue。
 [报错原因](https://github.com/vuejs/vue/issues/6698)
 
 	productionSourceMap:false	打包时不要生成map文件
-	
+
 	当使用history路由模式的时候,使用node搭建服务,防止页面刷新的时候报错,使用 koa2-connect-history-api-fallback插件
 ```js
 // Koa
@@ -142,5 +143,11 @@ app.use(historyApiFallback())
 			5. start和icon组件封装
 			6. 评价筛选和时间格式化函数
 			7. 商家收藏功能
-
-	
+		
+![1](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+![2](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+![3](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+![4](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+		
+		该项目主要功能及后台数据根据慕课网课程,Vue.js2.5+cube-ui重构饿了么App。由黄轶老师主讲
+[课程链接](https://coding.imooc.com/class/74.html)
