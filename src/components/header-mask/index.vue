@@ -30,8 +30,6 @@
 </template>
 
 <script>
-	import star from '@/components/star'
-	import SupportIcon from '@/components/support-icon'
 	export default {
 		name:'header-mask',
 		data(){
@@ -39,7 +37,10 @@
 				visible:true
 			}
 		},
-		components:{star,SupportIcon},
+		components:{
+			star:() => import('@/components/star'),
+			SupportIcon:() => import('@/components/support-icon')
+		},
 		methods:{
 			close(){
 				this.$emit("close")

@@ -107,11 +107,11 @@ if('addEventListener' in document){
 ```
 	
 	报错:
-		show_detail computed property vue/no-side-effects-in-computed-properties
-		在ESLint的情况下，computed中不能直接修改data中的数据,可以在methods中修改,然后在computed中调用该方法。
+	show_detail computed property vue/no-side-effects-in-computed-properties
+	在ESLint的情况下，computed中不能直接修改data中的数据,可以在methods中修改,然后在computed中调用该方法。
 
 	报错:
-		Unable to preventDefault inside passive event listener due to target being treated as passive.
+	Unable to preventDefault inside passive event listener due to target being treated as passive.
 [报错原因](https://blog.csdn.net/lijingshan34/article/details/88350456)
 
 	报错：
@@ -139,7 +139,8 @@ app.use(historyApiFallback())
  页面: 
  商品页面/评价页面/商家页面/商品详情页/头部浮层/购物车列表组件
 
- 功能:
+# 功能
+
 1. 菜单列表和商品列表联动滚动
 2. 加入购物车小球抛物线动画
 3. 商品加入购物车及删除
@@ -149,9 +150,13 @@ app.use(historyApiFallback())
 7. 商家收藏功能
 		
 ![1](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+
 ![2](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+
 ![3](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
+
 ![4](https://github.com/JayK0720/Vue-Eleme/blob/master/finished/1.png)
 		
 该项目主要功能及后台数据根据慕课网课程,Vue.js2.5+cube-ui重构饿了么App。由黄轶老师主讲
+
 [课程链接](https://coding.imooc.com/class/74.html)

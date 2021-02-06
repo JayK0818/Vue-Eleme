@@ -62,12 +62,11 @@
 </template>
 
 <script>
-	import star from '@/components/star'
 	import BScroll from 'better-scroll'
 	const RIGHT = 6;
 	import {tip} from '@/components/tip/index.js'
-	import SupportIcon from '@/components/support-icon'
 	import split from '@/components/split'
+	import {Icon} from 'ant-design-vue'
 	export default {
 		name :'seller',
 		data(){
@@ -92,7 +91,13 @@
 				this._init_pics()
 			},0)
 		},
-		components:{star,SupportIcon,split},
+		components:{
+			star:() =>import('@/components/star'),
+			SupportIcon:() => import('@/components/support-icon'),
+			split,
+			[Icon.name]:Icon,
+			
+		},
 		methods:{
 			_init_scroll(){
 				this.$nextTick(() => {

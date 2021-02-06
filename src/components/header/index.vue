@@ -34,7 +34,7 @@
 
 <script>
 	import {masker} from '@/components/header-mask/index.js';
-	import SupportIcon from '@/components/support-icon';
+	import {Icon} from 'ant-design-vue';
 	export default {
 		name:'v-header',
 		props:{
@@ -49,7 +49,8 @@
 			}
 		},
 		components:{
-			SupportIcon
+			SupportIcon:() => import("@/components/support-icon"),
+			[Icon.name]:Icon
 		}
 	}
 </script>

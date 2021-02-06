@@ -33,7 +33,7 @@
 									@click.stop="go_to_detail(food)"
 								>
 									<div class="food-icon">
-										<img :src="food['icon']" width="100%" height="100%">
+										<img v-lazy="food['icon']" width="100%" height="100%">
 									</div>
 									<div class="food-info">
 										<div class="food-name">{{food['name']}}</div>
@@ -71,8 +71,8 @@
 
 <script>
 	import loading from '@/components/loading'
+	import {Icon} from 'ant-design-vue'
 	import BScroll from 'better-scroll'
-	import SupportIcon from '@/components/support-icon'
 	import {mapMutations} from 'vuex'
 	const TITLE_HEIGHT = 26;
 	export default {
@@ -95,7 +95,11 @@
 			this.food_scroll = null;
 			this.menu_scroll = null;
 		},
-		components:{loading,SupportIcon},
+		components:{
+			loading,
+			SupportIcon:() => import("@/components/support-icon"),
+			[Icon.name]:Icon
+		},
 		watch:{
 			diff(value){
 				let fix_top = (value >= 0 && value < TITLE_HEIGHT) ? (TITLE_HEIGHT - value) : 0;

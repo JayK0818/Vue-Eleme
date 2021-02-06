@@ -62,6 +62,7 @@
 	import {_message} from '@/components/message'
 	import {tip} from '@/components/tip'
 	import BScroll from 'better-scroll'
+	import {Icon} from 'ant-design-vue'
 	let BALL_LENGTH = 10;
 	function create_ball(){
 		const ret = [];
@@ -91,6 +92,9 @@
 				type:Number,
 				required:true
 			}
+		},
+		components:{
+			[Icon.name]:Icon
 		},
 		computed: {
 			...mapState(['cart']),

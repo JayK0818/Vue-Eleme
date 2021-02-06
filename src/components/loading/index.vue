@@ -8,8 +8,12 @@
 </template>
 
 <script>
+	import {Icon} from 'ant-design-vue'
 	export default {
-		name:"loading"
+		name:"loading",
+		components:{
+			[Icon.name]:Icon
+		}
 	}
 </script>
 

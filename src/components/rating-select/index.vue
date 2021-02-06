@@ -31,6 +31,7 @@
 	const POSITIVE = 0;
 	const NEGATIVE = 1;
 	const ALL = 2;
+	import {Icon} from 'ant-design-vue'
 	export default {
 		name:'rating-select',
 		props:{
@@ -70,6 +71,9 @@
 			negative(){
 				return this.list.filter(rating => rating['rateType'] == NEGATIVE)
 			}
+		},
+		components:{
+			[Icon.name]:Icon
 		},
 		methods:{
 			toggle_content(){

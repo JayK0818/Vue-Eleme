@@ -75,12 +75,11 @@
 </template>
 
 <script>
-	import star from '@/components/star'
 	import BScroll from 'better-scroll'
 	import loading from '@/components/loading'
 	import RatingSelect from '@/components/rating-select'
 	import {format_date} from '@/common/js/util'
-	import {Tag,Empty} from 'ant-design-vue'
+	import {Tag,Empty,Icon} from 'ant-design-vue'
 	import split from '@/components/split'
 	const ALL = 2;
 	export default {
@@ -110,9 +109,11 @@
 			}
 		},
 		components:{
-			star,loading,RatingSelect,
+			star:() => import('@/components/star'),
+			loading,RatingSelect,
 			[Tag.name]:Tag,
 			[Empty.name]:Empty,
+			[Icon.name]:Icon,
 			split
 		},
 		computed:{

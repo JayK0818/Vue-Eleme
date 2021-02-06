@@ -69,11 +69,11 @@
 </template>
 
 <script>
-	import {mapState,mapMutations} from 'vuex'
+	import {mapMutations,mapState} from 'vuex'
 	import {_message} from '@/components/message'
 	import BScroll from 'better-scroll';
 	import RatingSelect from '@/components/rating-select'
-	import {Empty} from 'ant-design-vue'
+	import {Empty,Icon} from 'ant-design-vue'
 	import {format_date} from '@/common/js/util'
 	import split from '@/components/split'
 	const ALL = 2;
@@ -87,7 +87,7 @@
 					negative:"吐槽"
 				},
 				only_text:false,
-				current_type:2
+				current_type:2,
 			}
 		},
 		created(){
@@ -96,6 +96,9 @@
 		},
 		computed:{
 			...mapState(['detail']),
+			detail_id(){
+				return this.$route.params.id
+			},
 			filter_ratings(){
 				let ret = [];
 				this.detail['ratings'].forEach(rating => {
@@ -114,13 +117,18 @@
 				return format_date(value,'yyyy-MM-dd hh:mm');
 			}
 		},
-		components:{RatingSelect,[Empty.name]:Empty,split},
+		components:{
+			RatingSelect,
+			[Empty.name]:Empty,
+			split,
+			[Icon.name]:Icon
+		},
 		methods:{
 			...mapMutations(['add_food','reduce_food','clear_food']),
 			_init_scroll(){
 				this.$nextTick(() => {
 					this.scroll = new BScroll(this.$refs.detail_section,{
-						probeType:3,
+						probeType:1,
 						click:true
 					})
 				})

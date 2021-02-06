@@ -10,7 +10,7 @@ const routes = [
 		children:[
 			{
 				path:':id',
-				component:() => import("@/components/detail")
+				component:() => import("@/components/detail"),
 			}
 		]
 	},
