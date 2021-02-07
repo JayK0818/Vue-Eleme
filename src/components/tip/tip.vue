@@ -10,8 +10,12 @@
 </template>
 
 <script>
+	import {Icon} from 'ant-design-vue'
 	export default {
 		name:"tip",
+		components:{
+			[Icon.name]:Icon
+		}
 	}
 </script>
 
