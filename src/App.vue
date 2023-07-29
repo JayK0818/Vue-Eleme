@@ -18,10 +18,15 @@
   <div class="content">
     <router-view/>
   </div>
+  <!-- 弹出层 -->
+  <teleport to="body">
+    <seller-layer :seller="seller"/>
+  </teleport>
 </template>
 
 <script lang="ts" setup>
 import { nav_list } from '@/config/nav'
+import SellerLayer from '@/components/seller-layer/index.vue'
 import VHeader from '@/components/v-header/index.vue'
 import type { SellerDetailProps } from '@/interface/seller-interface'
 import { ref, onMounted } from 'vue'

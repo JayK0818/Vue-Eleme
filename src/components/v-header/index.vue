@@ -18,8 +18,7 @@
           <span class="discount-text">{{ seller.supports[0].description }}</span>
         </div>
         <div class="count-container">
-          <i>5个</i>
-          <i class="icon-keyboard_arrow_right icon"></i>
+          <i>5个</i><i class="icon-keyboard_arrow_right icon"></i>
         </div>
       </div>
     </div>
@@ -28,6 +27,12 @@
       <span class="bulletin-text">{{ seller.bulletin }}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
+    <div
+      class="header-image"
+      :style="{
+        'background-image': 'url(' + seller.avatar + ')'
+      }"
+    ></div>
   </header>
 </template>
 
@@ -46,7 +51,18 @@ defineProps({
 <style lang="scss" scoped>
 @import '../../style/background-image.scss';
 .header {
+  position: relative;
   background-color: rgba(7, 17, 27, .5);
+  overflow: hidden;
+  .header-image {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    filter: blur(6px);
+  }
   .content {
     display: flex;
     padding: 24px 12px 18px 24px;

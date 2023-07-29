@@ -1,4 +1,5 @@
 @mixin bg-image($url) {
+  background-repeat: no-repeat;
   @media screen and (min-resolution: 2dppx) {
     background-image: url($url + '@2x.png')
   }

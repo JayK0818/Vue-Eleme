@@ -5,6 +5,7 @@ html, body, ul, ol, h1, h2, h3, h4, h5, h6 p, input {
 html, body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  line-height: 1;
 }
 ul, ol {
   list-style: none;
@@ -16,6 +17,14 @@ a {
   text-decoration: none;
   color: rgba(0, 0, 0, .85)
 }
-/* #app {
-  line-height: 0;
-} */
+.clearfix {
+  display: inline-block;
+  &:after {
+    display: block;
+    content: ".";
+    clear: both;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+  }
+}
