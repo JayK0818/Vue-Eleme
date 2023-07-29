@@ -11,15 +11,11 @@
         const html = document.querySelector('html')
         const width = document.documentElement.clientWidth
         const fontSize = (100 / (750/width))
-        if (width >= 750) {
-          html.style.fontSize = '100px';
-          return false
-        }
         html.style.fontSize = `${fontSize}px`;
       }
-      setRootFontSize()
-      const resizeEvent = 'orientationchange' in window ? 'orientation' : 'resize'
-      window.addEventListener(resizeEvent, setRootFontSize, false)
+      // setRootFontSize()
+      // const resizeEvent = 'orientationchange' in window ? 'orientation' : 'resize'
+      // window.addEventListener(resizeEvent, setRootFontSize, false)
     </script>
   </head>
   <body>

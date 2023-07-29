@@ -1,5 +1,5 @@
 <template>
-  <header></header>
+  <v-header :seller="seller"/>
   <div class="tab-list border-bottom-1px">
     <router-link
       v-for="nav in nav_list"
@@ -22,14 +22,34 @@
 
 <script lang="ts" setup>
 import { nav_list } from '@/config/nav'
+import VHeader from '@/components/v-header/index.vue'
+import type { SellerDetailProps } from '@/interface/seller-interface'
+import { ref, onMounted } from 'vue'
+import { get_seller_detail } from '@/api/request'
 
+const seller = ref<SellerDetailProps | any>({})
+const spinning = ref<boolean>(true)
+
+onMounted(() => {
+  get_seller_detail().then(res => {
+    seller.value = res
+    console.log(res)
+  })
+    .catch((err) => {
+      console.log(err)
+      seller.value = {}
+    })
+    .finally(() => {
+      spinning.value = false
+    })
+})
 </script>
 
 <style lang="scss" scoped>
 .tab-list {
   display: flex;
-  height: 0.8rem;
-  line-height: 0.8rem;
+  height: 40px;
+  line-height: 40px;
   background-color: #fff;
   .tab-item {
     flex: 1;
