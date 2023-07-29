@@ -1,2 +1,7 @@
 @import './reset.scss';
 @import './font.scss';
+@import './border.scss';
+
+.border-bottom-1px {
+  @include border-bottom-1px(rgba(7, 17, 27, .1));
+}

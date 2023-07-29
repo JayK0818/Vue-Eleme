@@ -2,9 +2,22 @@ html, body, ul, ol, h1, h2, h3, h4, h5, h6 p, input {
   padding: 0;
   margin: 0;
 }
+html, body {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
 ul, ol {
   list-style: none;
 }
 i {
   font-style: normal;
+}
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, .85)
+}
+#app{
+  max-width: 750px;
+  min-width: 320px;
+  margin:0 auto;
 }
