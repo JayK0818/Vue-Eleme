@@ -9,15 +9,15 @@
         <div class="sub-title-container">
           <span class="sub-title-text">优惠信息</span>
         </div>
-        <ul class="discount-container" v-if="seller.supports && seller.supports.length">
+        <ul class="support-container" v-if="seller.supports && seller.supports.length">
           <li
-            v-for="(discount, idx) in seller.supports"
-            :key="discount.type"
-            class="discount-item"
-            :class="discount_type_class[idx]"
+            v-for="(support, idx) in seller.supports"
+            :key="support.type"
+            class="support-item"
+            :class="support_type_class[idx]"
           >
-            <discount-icon :type="discount_type_class[idx]" :level="2"/>
-            <span class="discount-text">{{ discount.description }}</span>
+            <support-icon :type="support_type_class[idx]" :level="2"/>
+            <span class="support-text">{{ support.description }}</span>
           </li>
         </ul>
         <div class="sub-title-container">
@@ -27,7 +27,7 @@
       </main>
     </div>
     <div class="footer">
-      <i class="icon-close"></i>
+      <i class="icon-close" @click.stop="close"></i>
     </div>
   </div>
 </template>
@@ -36,8 +36,8 @@
 import { PropType } from 'vue'
 import type { SellerDetailProps } from '@/interface/seller-interface'
 import Star from '@/components/star/index.vue'
-import DiscountIcon from '@/components/discount-icon/index.vue'
-import { discount_type_class } from '@/config/index'
+import SupportIcon from '@/components/support-icon/index.vue'
+import { support_type_class } from '@/config/index'
 
 defineProps({
   seller: {
@@ -45,6 +45,9 @@ defineProps({
     required: true
   }
 })
+const emit = defineEmits(['close'])
+
+const close = ():void => emit('close')
 
 </script>
 
@@ -56,7 +59,7 @@ defineProps({
   width: 100%;
   height: 100%;
   z-index: 100;
-  background-color: rgba(7, 17, 27, .65);
+  background-color: rgba(7, 17, 27, .8);
   overflow: auto;
   .container {
     width: 100%;
@@ -108,15 +111,15 @@ defineProps({
     line-height: 24px;
     color: #ffffff;
   }
-  .discount-container {
+  .support-container {
     padding: 24px 0;
-    .discount-item {
+    .support-item {
       padding: 6px 0;
       display: flex;
       align-items: center;
       height: 16px;
     }
-    .discount-text {
+    .support-text {
       padding-left: 6px;
       flex: 1;
       min-width: 0;

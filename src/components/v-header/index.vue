@@ -15,9 +15,13 @@
           <span class="delivery-time">{{ seller.deliveryTime }}分钟送达</span>
         </div>
         <div class="discount-info" v-if="seller.supports && seller.supports.length">
+          <support-icon
+            :level="1"
+            :type="support_type_class[seller.supports[0].type]"
+          />
           <span class="discount-text">{{ seller.supports[0].description }}</span>
         </div>
-        <div class="count-container">
+        <div class="count-container" @click.stop="show_seller_detail">
           <i>5个</i><i class="icon-keyboard_arrow_right icon"></i>
         </div>
       </div>
@@ -40,6 +44,8 @@
 <script lang="ts" setup>
 import type { SellerDetailProps } from '@/interface/seller-interface'
 import { PropType } from 'vue'
+import SupportIcon from '@/components/support-icon/index.vue'
+import { support_type_class } from '@/config'
 
 defineProps({
   seller: {
@@ -47,6 +53,9 @@ defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['show'])
+const show_seller_detail = ():void => emit('show')
 </script>
 
 <style lang="scss" scoped>
@@ -128,8 +137,11 @@ defineProps({
     }
   }
   .discount-info {
+    display: flex;
+    align-items: center;
     font-size: 10px;
     .discount-text {
+      padding-left: 4px;
       line-height: 12px;
       font-weight: 200;
     }

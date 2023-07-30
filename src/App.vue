@@ -1,5 +1,5 @@
 <template>
-  <v-header :seller="seller"/>
+  <v-header :seller="seller" @show="show_seller_detail"/>
   <div class="tab-list border-bottom-1px">
     <router-link
       v-for="nav in nav_list"
@@ -20,7 +20,11 @@
   </div>
   <!-- 弹出层 -->
   <teleport to="body">
-    <seller-layer :seller="seller"/>
+    <transition name="fade">
+      <template v-if="visible">
+        <seller-layer :seller="seller" @close="visible = false"/>
+      </template>
+    </transition>
   </teleport>
 </template>
 
@@ -33,6 +37,7 @@ import { ref, onMounted } from 'vue'
 import { get_seller_detail } from '@/api/request'
 
 const seller = ref<SellerDetailProps | any>({})
+const visible = ref<boolean>(false)
 const spinning = ref<boolean>(true)
 
 onMounted(() => {
@@ -48,6 +53,10 @@ onMounted(() => {
       spinning.value = false
     })
 })
+
+const show_seller_detail = ():void => {
+  visible.value = true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -66,5 +75,11 @@ onMounted(() => {
       color: rgb(240, 20, 20);
     }
   }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .35s linear;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
