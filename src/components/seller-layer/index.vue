@@ -3,6 +3,9 @@
     <div class="container clearfix">
       <main>
         <div class="title">{{ seller.name }}</div>
+        <div class="star-container">
+          <star size="large" :score="seller.score"/>
+        </div>
       </main>
     </div>
     <div class="footer">
@@ -14,6 +17,7 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 import type { SellerDetailProps } from '@/interface/seller-interface'
+import Star from '@/components/star/index.vue'
 defineProps({
   seller: {
     type: Object as PropType<SellerDetailProps>,
@@ -38,6 +42,12 @@ defineProps({
     color: #fff;
     main {
       padding: 64px 36px 64px;
+    }
+    .star-container {
+      margin: 0 auto;
+      width: 186px;
+      padding-top: 16px;
+      padding-bottom: 28px;
     }
   }
   .title {

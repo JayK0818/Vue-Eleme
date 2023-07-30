@@ -32,6 +32,7 @@
       :style="{
         'background-image': 'url(' + seller.avatar + ')'
       }"
+      v-if="seller.avatar"
     ></div>
   </header>
 </template>
