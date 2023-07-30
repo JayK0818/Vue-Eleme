@@ -1,9 +1,9 @@
 <template>
   <div class="star-wrapper" :class="size">
     <span
-      v-for="cls in classes"
+      v-for="(cls, i) in classes"
       :class="{ [cls]: true, 'star-item': true }"
-      :key="cls"
+      :key="i"
     ></span>
   </div>
 </template>
