@@ -76,8 +76,13 @@ const show_seller_detail = ():void => {
     }
   }
 }
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .35s linear;
+  transition: opacity .25s linear;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
