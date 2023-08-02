@@ -5,6 +5,9 @@
 .border-bottom-1px {
   @include border-bottom-1px(rgba(7, 17, 27, .1));
 }
+.border-none {
+  @include border-none();
+}
 
 #app {
   position: fixed;
