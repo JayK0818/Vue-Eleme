@@ -17,53 +17,60 @@
         </li>
       </ul>
     </div>
-    <div class="goods-container">
-      <div
-        class="good-category"
-        v-for="good in goods_list"
-        :key="good.name"
-      >
-        <template v-if="good.foods && good.foods.length">
-          <div class="category-title">{{ good.name }}</div>
-          <div class="category-food-container">
-            <div
-              class="food-item border-bottom-1px"
-              v-for="(food, i) in good.foods"
-              :key="food.id"
-              :class="{ 'border-none': i === good.foods.length - 1 }"
-            >
-              <div class="food-img">
-                <img :src="food.image" alt="" class="img">
-              </div>
-              <div class="food-info">
-                <div class="food-title">{{ food.name }}</div>
-                <div class="food-desc" v-if="food.description">{{ food.description }}</div>
-                <div style="padding-top: 8px; line-height:10px;">
-                  <span class="sell-count">月售{{ food.sellCount }}份</span>
-                  <span class="rating-text">好评率{{ food.rating }}%</span>
+    <div class="goods-container" ref="container">
+      <section>
+        <div
+          class="good-category"
+          v-for="good in goods_list"
+          :key="good.name"
+          ref="category_card"
+        >
+          <template v-if="good.foods && good.foods.length">
+            <div class="category-title">{{ good.name }}</div>
+            <div class="category-food-container">
+              <div
+                class="food-item border-bottom-1px"
+                v-for="(food, i) in good.foods"
+                :key="food.id"
+                :class="{ 'border-none': i === good.foods.length - 1 }"
+              >
+                <div class="food-img">
+                  <img :src="food.image" alt="" class="img">
                 </div>
-                <div class="price">
-                  <span class="new-price">{{ food.price }}</span>
-                  <span class="old-price" v-if="food.oldPrice">{{ food.oldPrice }}</span>
+                <div class="food-info">
+                  <div class="food-title">{{ food.name }}</div>
+                  <div class="food-desc" v-if="food.description">{{ food.description }}</div>
+                  <div style="padding-top: 8px; line-height:10px;">
+                    <span class="sell-count">月售{{ food.sellCount }}份</span>
+                    <span class="rating-text">好评率{{ food.rating }}%</span>
+                  </div>
+                  <div class="price">
+                    <span class="new-price">{{ food.price }}</span>
+                    <span class="old-price" v-if="food.oldPrice">{{ food.oldPrice }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
-      </div>
+          </template>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import axios from '@/api'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import SupportIcon from '@/components/support-icon/index.vue'
 import type { GoodsListProps } from '@/interface/goods-interface'
 import { support_type_class } from '@/config'
+import BetterScroll from 'better-scroll'
 
 const goods_list = ref<GoodsListProps[]>([])
 const spinning = ref<boolean>(true)
+const container = ref<null | HTMLElement>(null)
+const category_card = ref<Array<HTMLElement>>([])
+const height_list = ref<number[]>([])
 
 const get_goods_list = () => {
   spinning.value = true
@@ -73,11 +80,36 @@ const get_goods_list = () => {
     goods_list.value = []
   }).finally(() => {
     spinning.value = false
+    _init_scroll()
+    height_list.value = _get_category_title_height()
   })
 }
 onMounted(() => {
   get_goods_list()
 })
+const _init_scroll = ():void => {
+  nextTick(() => {
+    // eslint-disable-next-line
+    const bs_instance = new BetterScroll(container.value as HTMLElement, {
+      probeType: 3
+    })
+    // 监听better-scroll的滚动事件
+    bs_instance.on('scroll', ({ y }: { y: number }) => {
+      console.log(y)
+    })
+  })
+}
+const _get_category_title_height = ():number[] => {
+  const temp = [0]
+  let height = 0
+  category_card.value.forEach(category => {
+    height += category.clientHeight
+    temp.push(height)
+  })
+  console.log(temp)
+  return temp
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -109,7 +141,7 @@ onMounted(() => {
   .goods-container {
     flex: 1;
     min-width: 0;
-    overflow: auto;
+    overflow: hidden;
   }
   .category-title {
     height: 26px;
