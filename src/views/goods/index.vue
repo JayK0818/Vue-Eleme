@@ -3,17 +3,23 @@
     <div class="menu-list">
       <ul>
         <li
-          v-for="item in goods_list"
+          v-for="(item, idx) in goods_list"
           :key="item.name"
-          class="menu-item border-bottom-1px"
+          class="menu-item"
+          :class="{active: active_idx === idx }"
         >
-          <support-icon
-            class="menu-icon"
-            v-if="item.type > 0"
-            :level="3"
-            :type="support_type_class[item.type]"
-          ></support-icon>
-          <span class="menu-text">{{ item.name }}</span>
+          <div
+            class="border-bottom-1px menu-box"
+            :class="{ 'border-none': active_idx === idx }"
+          >
+            <support-icon
+              class="menu-icon"
+              v-if="item.type > 0"
+              :level="3"
+              :type="support_type_class[item.type]"
+            ></support-icon>
+            <span class="menu-text">{{ item.name }}</span>
+          </div>
         </li>
       </ul>
     </div>
@@ -71,6 +77,7 @@ const spinning = ref<boolean>(true)
 const container = ref<null | HTMLElement>(null)
 const category_card = ref<Array<HTMLElement>>([])
 const height_list = ref<number[]>([])
+const active_idx = ref<number>(0)
 
 const get_goods_list = () => {
   spinning.value = true
@@ -95,7 +102,7 @@ const _init_scroll = ():void => {
     })
     // 监听better-scroll的滚动事件
     bs_instance.on('scroll', ({ y }: { y: number }) => {
-      console.log(y)
+      calc_menu_idx(Math.abs(y))
     })
   })
 }
@@ -106,8 +113,17 @@ const _get_category_title_height = ():number[] => {
     height += category.clientHeight
     temp.push(height)
   })
-  console.log(temp)
   return temp
+}
+
+const calc_menu_idx = (y: number):void => {
+  for (let i = 0, length = height_list.value.length; i < length - 1; i++) {
+    const h1 = height_list.value[i]
+    const h2 = height_list.value[i + 1]
+    if (y >= h1 && y < h2) {
+      active_idx.value = i
+    }
+  }
 }
 
 </script>
@@ -120,12 +136,17 @@ const _get_category_title_height = ():number[] => {
   background-color: #fff;
   .menu-list {
     box-sizing: border-box;
-    padding: 0 12px;
     width: 84px;
     background-color: #f3f5f7;
     overflow: auto;
     .menu-item {
-      padding: 13px 0;
+      padding: 0 12px;
+      &.active {
+        background-color: #fff;
+      }
+      .menu-box {
+        padding: 13px 0;
+      }
       .menu-text {
         padding-left: 2px;
         font-size: 12px;

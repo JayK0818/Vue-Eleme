@@ -27,6 +27,6 @@
 
 @mixin border-none {
   &:after {
-    border-width: 0;
+    border-color: transparent;
   }
 }
