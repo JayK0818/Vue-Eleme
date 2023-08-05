@@ -25,6 +25,33 @@
   }
 }
 
+@mixin border-left-1px ($color) {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-left: 1px solid $color;
+  }
+  @media screen and (min-resolution: 1.5dppx) {
+    &:before {
+      transform: scaleX(0.7);
+    }
+  }
+  @media screen and (min-resolution: 2dppx) {
+    &:before {
+      transform: scaleX(0.5);
+    }
+  }
+  @media screen and (min-resolution: 3dppx) {
+    &:before {
+      transform: scaleX(0.33)
+    }
+  }
+}
+
 @mixin border-none {
   &:after {
     border-color: transparent;

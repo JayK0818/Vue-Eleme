@@ -18,6 +18,8 @@
   <div class="content">
     <router-view/>
   </div>
+  <!-- 购物车 -->
+  <shopping-car/>
   <!-- 弹出层 -->
   <teleport to="body">
     <transition name="fade">
@@ -32,6 +34,7 @@
 import { nav_list } from '@/config/nav'
 import SellerLayer from '@/components/seller-layer/index.vue'
 import VHeader from '@/components/v-header/index.vue'
+import ShoppingCar from '@/components/shopping-car/index.vue'
 import type { SellerDetailProps } from '@/interface/seller-interface'
 import { ref, onMounted } from 'vue'
 import { get_seller_detail } from '@/api/request'

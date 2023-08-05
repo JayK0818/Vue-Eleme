@@ -7,6 +7,7 @@
           :key="item.name"
           class="menu-item"
           :class="{active: active_idx === idx }"
+          @click.stop="menu_jump(idx)"
         >
           <div
             class="border-bottom-1px menu-box"
@@ -23,7 +24,7 @@
         </li>
       </ul>
     </div>
-    <div class="goods-container" ref="container">
+    <div class="goods-container" ref="container" @touchstart.stop="is_clicked">
       <section>
         <div
           class="good-category"
@@ -78,6 +79,8 @@ const container = ref<null | HTMLElement>(null)
 const category_card = ref<Array<HTMLElement>>([])
 const height_list = ref<number[]>([])
 const active_idx = ref<number>(0)
+const scroll_instance = ref<null | any>(null)
+const is_click_menu = ref<boolean>(false)
 
 const get_goods_list = () => {
   spinning.value = true
@@ -98,10 +101,13 @@ const _init_scroll = ():void => {
   nextTick(() => {
     // eslint-disable-next-line
     const bs_instance = new BetterScroll(container.value as HTMLElement, {
-      probeType: 3
+      probeType: 3,
+      click: true
     })
+    scroll_instance.value = bs_instance
     // 监听better-scroll的滚动事件
     bs_instance.on('scroll', ({ y }: { y: number }) => {
+      if (is_click_menu.value) return
       calc_menu_idx(Math.abs(y))
     })
   })
@@ -126,6 +132,19 @@ const calc_menu_idx = (y: number):void => {
   }
 }
 
+/**
+ * @description 点击菜单跳转
+*/
+const menu_jump = (idx: number):void => {
+  is_click_menu.value = true
+  const top = height_list.value[idx]
+  active_idx.value = idx
+  scroll_instance.value && scroll_instance.value.scrollTo(0, -top, 300)
+}
+
+const is_clicked = ():void => {
+  is_click_menu.value = false
+}
 </script>
 
 <style lang="scss" scoped>
