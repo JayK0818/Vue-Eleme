@@ -6,8 +6,8 @@ import { SellerDetailProps } from '@/interface/seller-interface'
 */
 const get_seller_detail = async (): Promise<SellerDetailProps | any> => {
   const store = useSellerStore()
-  if (Object.keys(store.detail).length) {
-    return store.detail
+  if (Object.keys(store.seller).length) {
+    return store.seller
   }
   try {
     const data = await axios.get('/api/seller/seller_detail') as SellerDetailProps

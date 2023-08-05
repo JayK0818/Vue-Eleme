@@ -46,7 +46,6 @@ const spinning = ref<boolean>(true)
 onMounted(() => {
   get_seller_detail().then(res => {
     seller.value = res
-    console.log(res)
   })
     .catch((err) => {
       console.log(err)
