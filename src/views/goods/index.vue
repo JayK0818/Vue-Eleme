@@ -55,6 +55,9 @@
                     <span class="new-price">{{ food.price }}</span>
                     <span class="old-price" v-if="food.oldPrice">{{ food.oldPrice }}</span>
                   </div>
+                  <div class="food-control-container">
+                    <food-control-button :food="food"/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -72,6 +75,7 @@ import SupportIcon from '@/components/support-icon/index.vue'
 import type { GoodsListProps } from '@/interface/goods-interface'
 import { support_type_class } from '@/config'
 import BetterScroll from 'better-scroll'
+import FoodControlButton from '@/components/food-control-button/index.vue'
 
 const goods_list = ref<GoodsListProps[]>([])
 const spinning = ref<boolean>(true)
@@ -209,6 +213,7 @@ const is_clicked = ():void => {
       }
     }
     .food-info {
+      position: relative;
       padding-left: 10px;
       flex: 1;
       min-width: 0;
@@ -251,6 +256,11 @@ const is_clicked = ():void => {
         color: rgb(147, 153, 159);
         font-weight: 700;
         font-size: 10px;
+      }
+      .food-control-container {
+        position: absolute;
+        right: 0;
+        bottom: 0;
       }
     }
   }

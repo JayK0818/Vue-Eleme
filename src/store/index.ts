@@ -21,14 +21,14 @@ const useSellerStore = defineStore('seller', {
 */
 const useShoppingCarStore = defineStore('shopping-car', {
   state: () => ({
-    goods_list: [] as ShoppingCarGoodsListProps[]
+    food_list: [] as ShoppingCarGoodsListProps[]
   }),
   actions: {
     increment (payload: FoodListProps) {
       const { id, name, image, price } = payload
-      const good_idx = this.goods_list.findIndex(good => good.id === id)
+      const good_idx = this.food_list.findIndex(food => food.id === id)
       if (good_idx === -1) {
-        this.goods_list.push({
+        this.food_list.push({
           count: 1,
           id,
           name,
@@ -36,18 +36,28 @@ const useShoppingCarStore = defineStore('shopping-car', {
           price
         })
       } else {
-        this.goods_list[good_idx].count += 1
+        this.food_list[good_idx].count += 1
       }
     },
     decrement (payload: ShoppingCarGoodsListProps) {
-      const good_idx = this.goods_list.findIndex(good => good.id === payload.id)
+      const good_idx = this.food_list.findIndex(food => food.id === payload.id)
       if (good_idx === -1) return
-      this.goods_list[good_idx].count -= 1
+      this.food_list[good_idx].count -= 1
+      if (this.food_list[good_idx].count === 0) {
+        this.food_list.splice(good_idx, 1)
+      }
     }
   },
   getters: {
-    price_total: (state) => state.goods_list.reduce((p, n) => p + n.count * n.price, 0),
-    count_total: (state) => state.goods_list.reduce((p, n) => p + n.count, 0)
+    price_total: (state) => state.food_list.reduce((p, n) => p + n.count * n.price, 0),
+    count_total: (state) => state.food_list.reduce((p, n) => p + n.count, 0),
+    food_id_count_map: (state) => {
+      const map: {[key: number]: number} = {}
+      state.food_list.forEach(item => {
+        map[item.id] = item.count
+      })
+      return map
+    }
   }
 })
 

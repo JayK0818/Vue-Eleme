@@ -4,11 +4,11 @@
       <div class="car-container">
         <div
           class="count-icon"
-          v-if="goods_list.length"
+          v-if="food_list.length"
         >{{ count_total > 99 ? '99+' : count_total }}</div>
         <div
           class="car"
-          :class="{active: goods_list.length > 0}"
+          :class="{active: food_list.length > 0}"
         >
           <span class="car-icon icon-shopping_cart"></span>
         </div>
@@ -16,7 +16,7 @@
       <div
         class="price-container"
         :class="{
-          active: goods_list.length > 0
+          active: food_list.length > 0
         }"
       >
         ¥{{ price_total }}
@@ -29,9 +29,9 @@
       class="confirm-btn"
       :class="{ active: price_total >= delivery_min_price }"
     >
-      <template v-if="goods_list.length === 0">¥{{delivery_min_price}}起送</template>
+      <template v-if="food_list.length === 0">¥{{delivery_min_price}}起送</template>
       <template v-else>
-        {{ price_total < delivery_min_price ? `还差¥ ${delivery_min_price - price_total}起送` : '去结算' }}
+        {{ price_total < delivery_min_price ? `还差 ¥ ${delivery_min_price - price_total} 起送` : '去结算' }}
       </template>
     </div>
   </div>
@@ -44,12 +44,12 @@ import { computed } from 'vue'
 
 const store = useShoppingCarStore()
 const seller_store = useSellerStore()
-const { price_total, count_total, goods_list } = storeToRefs(store)
+const { price_total, count_total, food_list } = storeToRefs(store)
 const { seller } = storeToRefs(seller_store)
 
 const delivery_min_price = computed(() => {
-  if (seller.minPrice === undefined) return 10
-  return seller.minPrice
+  if (seller.value.minPrice === undefined) return 10
+  return seller.value.minPrice
 })
 
 </script>
@@ -83,13 +83,18 @@ const delivery_min_price = computed(() => {
           color: #fff;
         }
       }
-      .count-icon {
+    }
+    .car-icon {
+      font-size: 24px;
+      line-height: 24px;
+    }
+    .count-icon {
         position: absolute;
         right: 0;
         top: 0;
         width: 24px;
         height: 16px;
-        font-size: 9px;
+        font-size: 10px;
         line-height: 16px;
         font-weight: 700;
         text-align: center;
@@ -99,11 +104,6 @@ const delivery_min_price = computed(() => {
         box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .1);
         border-radius: 16px;
       }
-    }
-    .car-icon {
-      font-size: 24px;
-      line-height: 24px;
-    }
   }
   .confirm-btn {
     box-sizing: border-box;
