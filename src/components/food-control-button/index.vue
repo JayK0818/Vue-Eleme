@@ -38,6 +38,7 @@ const add_food = (event):void => {
 }
 const reduce_food = ():void => {
   store.decrement(props.food)
+  bus.emit('food_update')
 }
 </script>
 

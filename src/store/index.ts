@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { SellerDetailProps } from '@/interface/seller-interface'
-import type { ShoppingCarGoodsListProps } from '@/interface/shopping-car-interface'
+// import type { ShoppingCarGoodsListProps } from '@/interface/shopping-car-interface'
 import type { FoodListProps } from '@/interface/goods-interface'
 /**
  * @description 商家详情
@@ -19,22 +19,18 @@ const useSellerStore = defineStore('seller', {
 /**
  * @description 购物车
 */
+type ShoppingCarGoodsListProps = FoodListProps & {
+  count: number
+}
 const useShoppingCarStore = defineStore('shopping-car', {
   state: () => ({
     food_list: [] as ShoppingCarGoodsListProps[]
   }),
   actions: {
     increment (payload: FoodListProps) {
-      const { id, name, image, price } = payload
-      const good_idx = this.food_list.findIndex(food => food.id === id)
+      const good_idx = this.food_list.findIndex(food => food.id === payload.id)
       if (good_idx === -1) {
-        this.food_list.push({
-          count: 1,
-          id,
-          name,
-          url: image,
-          price
-        })
+        this.food_list.push({ ...payload, count: 1 })
       } else {
         this.food_list[good_idx].count += 1
       }
@@ -46,6 +42,9 @@ const useShoppingCarStore = defineStore('shopping-car', {
       if (this.food_list[good_idx].count === 0) {
         this.food_list.splice(good_idx, 1)
       }
+    },
+    clear () {
+      this.food_list = []
     }
   },
   getters: {

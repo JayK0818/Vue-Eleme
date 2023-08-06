@@ -1,6 +1,9 @@
 <template>
   <div class="shopping-car-wrapper">
-    <section style="flex: 1; display: inline-flex;">
+    <section
+      style="flex: 1; display: inline-flex;"
+      @click.stop="toggle_fold"
+    >
       <div class="car-container">
         <div
           class="count-icon"
@@ -34,6 +37,12 @@
         {{ price_total < delivery_min_price ? `还差 ¥ ${delivery_min_price - price_total} 起送` : '去结算' }}
       </template>
     </div>
+    <!-- 购物车详情列表 -->
+    <transition name="slide">
+      <template v-if="is_visible">
+        <foods-list/>
+      </template>
+    </transition>
   </div>
   <!-- 小球动画 -->
   <div class="ball-container">
@@ -53,13 +62,18 @@
       </transition>
     </template>
   </div>
+  <!-- 购物车详情背景 -->
+  <transition name="fade">
+    <template v-if="is_visible"><div class="food-list-detail-mask"></div></template>
+  </transition>
 </template>
 
 <script lang="ts" setup>
 import { useShoppingCarStore, useSellerStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import bus from '@/utils/bus'
+import FoodsList from './components/foods-list.vue'
 
 const store = useShoppingCarStore()
 const seller_store = useSellerStore()
@@ -73,21 +87,44 @@ const delivery_min_price = computed(() => {
 
 const ball_list = ref<{ visible: boolean }>([])
 const drop_balls = ref<HTMLElement[]>([])
+const is_fold = ref<boolean>(true)
+/**
+ * @description 购物车详情是否显示
+*/
+const is_visible = computed(() => {
+  if (price_total.value === 0) {
+    // eslint-disable-next-line
+    is_fold.value = true
+    return false
+  }
+  return !is_fold.value
+})
+/**
+ * @description 切换购物车详情折叠
+*/
+const toggle_fold = ():void => {
+  if (price_total.value === 0) {
+    return
+  }
+  is_fold.value = !is_fold.value
+}
 
 onMounted(() => {
   for (let i = 0; i < 10; i++) {
     ball_list.value.push({ visible: false })
   }
   bus.on('update', (target) => {
-    for (let i = 0, length = ball_list.value.length; i < length; i++) {
-      const ball = ball_list.value[i]
-      if (!ball.visible) {
-        ball.visible = true
-        ball.el = target
-        drop_balls.value.push(ball)
-        break
+    nextTick(() => {
+      for (let i = 0, length = ball_list.value.length; i < length; i++) {
+        const ball = ball_list.value[i]
+        if (!ball.visible) {
+          ball.visible = true
+          ball.el = target
+          drop_balls.value.push(ball)
+          break
+        }
       }
-    }
+    })
   })
 })
 
@@ -125,9 +162,11 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .shopping-car-wrapper {
+  position: relative;
   display: flex;
   height: 48px;
   background-color: #141d27;
+  z-index: 100;
   .car-container {
     position: relative;
     margin-left: 12px;
@@ -220,14 +259,35 @@ onBeforeUnmount(() => {
     left: 36px;
     bottom: 32px;
     z-index: 100;
-    transition: all .5s cubic-bezier(.4, -0.64, .82, .72);
+    transition: all .48s cubic-bezier(.36, -0.64, .82, .72);
     .inner {
       width: 16px;
       height: 16px;
       border-radius: 50%;
       background-color: rgb(0, 160, 220);
-      transition: all .5s linear;
+      transition: all .48s linear;
     }
   }
+}
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+.slide-enter-from, .slide-leave-to {
+  height: 0;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: all .25s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.food-list-detail-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, .65);
+  z-index: 1;
 }
 </style>
