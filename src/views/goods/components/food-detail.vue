@@ -31,16 +31,31 @@
       </div>
     </template>
     <div class="block"></div>
+    <rating-select
+      :is_show_title="true"
+      :rating_list="food.ratings"
+      :is_only_content_show="is_only_content_show"
+      :rating_type="rating_type"
+      @toggle="toggle"
+    />
+    <food-rating-list
+      :rating_list="food.ratings"
+      :is_only_content_show="is_only_content_show"
+      :rating_type="rating_type"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { FoodListProps } from '@/interface/goods-interface'
-import { PropType } from 'vue'
+import { PropType, ref } from 'vue'
 import { useShoppingCarStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import FoodControlButton from '@/components/food-control-button/index.vue'
+import FoodRatingList from '@/components/food-rating-list/index.vue'
 import bus from '@/utils/bus'
+import RatingSelect from '@/components/rating-select/index.vue'
+import { RATING_ALL } from '@/constants/index'
 
 const props = defineProps({
   food: {
@@ -57,11 +72,25 @@ const add_good = (event):void => {
   store.increment(props.food)
   bus.emit('update', event.target)
 }
+const is_only_content_show = ref<boolean>(false)
+const rating_type = ref<string>(RATING_ALL)
+
+const toggle = ({ type, payload }: { type: string; payload?: string }):void => {
+  switch (type) {
+    case 'is_only_show_content':
+      is_only_content_show.value = !is_only_content_show.value
+      break
+    case 'rating_type':
+      rating_type.value = payload
+      break
+  }
+}
 
 </script>
 
 <style lang="scss" scoped>
 .food-detail-wrapper {
+  padding-bottom: 16px;
   position: fixed;
   top: 0;
   left: 0;

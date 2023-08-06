@@ -1,3 +1,11 @@
+type RatingListProps = {
+  avatar: string
+  rateTime: number
+  rateType: number
+  text: string
+  username: string
+}
+
 interface FoodListProps {
   description: string
   icon: string
@@ -8,13 +16,7 @@ interface FoodListProps {
   oldPrice: number | string
   price: number
   rating: number | string
-  ratings: Array<{
-    avatar: string
-    rateTime: number
-    rateType: number
-    text: string
-    username: string
-  }>
+  ratings: Array<RatingListProps>
   sellCount: number
 }
 
@@ -26,5 +28,6 @@ interface GoodsListProps {
 
 export type {
   GoodsListProps,
-  FoodListProps
+  FoodListProps,
+  RatingListProps
 }
