@@ -35,12 +35,31 @@
       </template>
     </div>
   </div>
+  <!-- 小球动画 -->
+  <div class="ball-container">
+    <template v-for="(ball, i) in ball_list" :key="i">
+      <transition
+        @before-enter="before_enter"
+        @enter="enter"
+        @after-enter="after_enter"
+      >
+        <div
+          class="ball"
+          :key="i"
+          v-if="ball.visible"
+        >
+          <div class="inner"></div>
+        </div>
+      </transition>
+    </template>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { useShoppingCarStore, useSellerStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import bus from '@/utils/bus'
 
 const store = useShoppingCarStore()
 const seller_store = useSellerStore()
@@ -52,6 +71,56 @@ const delivery_min_price = computed(() => {
   return seller.value.minPrice
 })
 
+const ball_list = ref<{ visible: boolean }>([])
+const drop_balls = ref<HTMLElement[]>([])
+
+onMounted(() => {
+  for (let i = 0; i < 10; i++) {
+    ball_list.value.push({ visible: false })
+  }
+  bus.on('update', (target) => {
+    for (let i = 0, length = ball_list.value.length; i < length; i++) {
+      const ball = ball_list.value[i]
+      if (!ball.visible) {
+        ball.visible = true
+        ball.el = target
+        drop_balls.value.push(ball)
+        break
+      }
+    }
+  })
+})
+
+const before_enter = (el):void => {
+  const ball = drop_balls.value[drop_balls.value.length - 1]
+  const { left, top } = ball.el.getBoundingClientRect()
+  const x = left - 30
+  const y = -(window.innerHeight - top - 32)
+  el.style.display = ''
+  el.style.transform = el.style.webkitTransform = `translate3d(0, ${y}px, 0)`
+  const inner = el.querySelector('.inner')
+  inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
+}
+
+const enter = (el, done):void => {
+  // eslint-disable-next-line
+  const h = el.offsetHeight
+  el.style.transform = el.style.webkitTransform = 'translate3d(0, 0, 0)'
+  const inner = el.querySelector('.inner')
+  inner.style.transform = inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+  el.addEventListener('transitionend', done)
+}
+
+const after_enter = (el):void => {
+  const ball = drop_balls.value.shift()
+  if (ball) {
+    ball.visible = false
+    el.style.display = 'none'
+  }
+}
+onBeforeUnmount(() => {
+  bus.off('update')
+})
 </script>
 
 <style lang="scss" scoped>
@@ -78,7 +147,7 @@ const delivery_min_price = computed(() => {
       color: rgba(255, 255, 255, .4);
       background-color: #2b343c;
       &.active {
-        background-color: #00a1dc ;
+        background-color: #00a1dc;
         .car-icon {
           color: #fff;
         }
@@ -89,21 +158,21 @@ const delivery_min_price = computed(() => {
       line-height: 24px;
     }
     .count-icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 24px;
-        height: 16px;
-        font-size: 10px;
-        line-height: 16px;
-        font-weight: 700;
-        text-align: center;
-        color: #fff;
-        background-color: red;
-        z-index: 20;
-        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .1);
-        border-radius: 16px;
-      }
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 24px;
+      height: 16px;
+      font-size: 10px;
+      line-height: 16px;
+      font-weight: 700;
+      text-align: center;
+      color: #fff;
+      background-color: red;
+      z-index: 20;
+      box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .1);
+      border-radius: 16px;
+    }
   }
   .confirm-btn {
     box-sizing: border-box;
@@ -142,6 +211,22 @@ const delivery_min_price = computed(() => {
       color: rgba(255, 255, 255, .4);
       font-weight: 200;
       line-height: 24px;
+    }
+  }
+}
+.ball-container {
+  .ball {
+    position: fixed;
+    left: 36px;
+    bottom: 32px;
+    z-index: 100;
+    transition: all .5s cubic-bezier(.4, -0.64, .82, .72);
+    .inner {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: rgb(0, 160, 220);
+      transition: all .5s linear;
     }
   }
 }

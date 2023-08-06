@@ -20,6 +20,7 @@ import type { FoodListProps } from '@/interface/goods-interface'
 import { PropType } from 'vue'
 import { useShoppingCarStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import bus from '@/utils/bus'
 
 const props = defineProps({
   food: {
@@ -31,8 +32,9 @@ const store = useShoppingCarStore()
 
 const { food_id_count_map } = storeToRefs(store)
 
-const add_food = ():void => {
+const add_food = (event):void => {
   store.increment(props.food)
+  bus.emit('update', event.target)
 }
 const reduce_food = ():void => {
   store.decrement(props.food)
@@ -60,7 +62,7 @@ const reduce_food = ():void => {
   .count-text {
     display: inline-block;
     text-align: center;
-    width: 20px;
+    width: 22px;
     font-size: 14px;
     line-height: 24px;
     color: rgb(147, 153, 159);
@@ -69,11 +71,12 @@ const reduce_food = ():void => {
 }
 // 按钮动画样式
 .slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all 0.15s linear;
+  transition: all 0.18s linear;
 }
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(20px);
+  transform: translateX(20px) rotate(180deg);
   opacity: 0;
 }
+
 </style>
