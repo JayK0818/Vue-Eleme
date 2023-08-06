@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import type { FoodListProps } from '@/interface/goods-interface'
-import { PropType } from 'vue'
+import { PropType, nextTick } from 'vue'
 import { useShoppingCarStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import bus from '@/utils/bus'
@@ -33,12 +33,13 @@ const store = useShoppingCarStore()
 const { food_id_count_map } = storeToRefs(store)
 
 const add_food = (event):void => {
-  store.increment(props.food)
   bus.emit('update', event.target)
+  nextTick(() => {
+    store.increment(props.food)
+  })
 }
 const reduce_food = ():void => {
   store.decrement(props.food)
-  bus.emit('food_update')
 }
 </script>
 

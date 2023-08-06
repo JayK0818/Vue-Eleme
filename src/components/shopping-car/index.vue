@@ -71,7 +71,7 @@
 <script lang="ts" setup>
 import { useShoppingCarStore, useSellerStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import bus from '@/utils/bus'
 import FoodsList from './components/foods-list.vue'
 
@@ -114,17 +114,15 @@ onMounted(() => {
     ball_list.value.push({ visible: false })
   }
   bus.on('update', (target) => {
-    nextTick(() => {
-      for (let i = 0, length = ball_list.value.length; i < length; i++) {
-        const ball = ball_list.value[i]
-        if (!ball.visible) {
-          ball.visible = true
-          ball.el = target
-          drop_balls.value.push(ball)
-          break
-        }
+    for (let i = 0, length = ball_list.value.length; i < length; i++) {
+      const ball = ball_list.value[i]
+      if (!ball.visible) {
+        ball.visible = true
+        ball.el = target
+        drop_balls.value.push(ball)
+        break
       }
-    })
+    }
   })
 })
 

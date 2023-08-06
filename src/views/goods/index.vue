@@ -44,7 +44,7 @@
                 <div class="food-img">
                   <img :src="food.image" alt="" class="img">
                 </div>
-                <div class="food-info">
+                <div class="food-info" @click.stop="get_food_detail(food)">
                   <div class="food-title">{{ food.name }}</div>
                   <div class="food-desc" v-if="food.description">{{ food.description }}</div>
                   <div style="padding-top: 8px; line-height:10px;">
@@ -66,16 +66,22 @@
       </section>
     </div>
   </div>
+  <transition name="slide">
+    <template v-if="is_visible">
+      <food-detail :food="active_food" @cancel="is_visible = false"/>
+    </template>
+  </transition>
 </template>
 
 <script lang="ts" setup>
 import axios from '@/api'
 import { onMounted, ref, nextTick } from 'vue'
 import SupportIcon from '@/components/support-icon/index.vue'
-import type { GoodsListProps } from '@/interface/goods-interface'
+import type { GoodsListProps, FoodListProps } from '@/interface/goods-interface'
 import { support_type_class } from '@/config'
 import BetterScroll from 'better-scroll'
 import FoodControlButton from '@/components/food-control-button/index.vue'
+import FoodDetail from './components/food-detail.vue'
 
 const goods_list = ref<GoodsListProps[]>([])
 const spinning = ref<boolean>(true)
@@ -85,6 +91,8 @@ const height_list = ref<number[]>([])
 const active_idx = ref<number>(0)
 const scroll_instance = ref<null | any>(null)
 const is_click_menu = ref<boolean>(false)
+const active_food = ref<FoodListProps | any>({})
+const is_visible = ref<boolean>(false)
 
 const get_goods_list = () => {
   spinning.value = true
@@ -149,6 +157,16 @@ const menu_jump = (idx: number):void => {
 const is_clicked = ():void => {
   is_click_menu.value = false
 }
+
+/**
+ * @description 获取食物详情
+*/
+const get_food_detail = (food: FoodListProps):void => {
+  active_food.value = { ...food }
+  nextTick(() => {
+    is_visible.value = true
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -209,7 +227,7 @@ const is_clicked = ():void => {
       line-height: 57px;
       img {
         max-width: 100%;
-        height: 100%;
+        max-height: 100%;
       }
     }
     .food-info {
@@ -264,5 +282,11 @@ const is_clicked = ():void => {
       }
     }
   }
+}
+.slide-enter-active, .slide-leave-active {
+  transition: all .2s linear;
+}
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
 }
 </style>
