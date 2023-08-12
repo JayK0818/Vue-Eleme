@@ -8,6 +8,9 @@
 .border-left-1px {
   @include border-left-1px(#2c343d);
 }
+.border-right-1px {
+  @include border-right-1px(rgba(7, 17, 27, .1));
+}
 .border-none {
   @include border-none();
 }

@@ -51,6 +51,32 @@
     }
   }
 }
+@mixin border-right-1px ($color) {
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    border-right: 1px solid $color;
+  }
+  @media screen and (min-resolution: 1.5dppx) {
+    &:after {
+      transform: scaleX(0.7)
+    }
+  }
+  @media screen and (min-resolution: 2dppx) {
+    &:after {
+      transform: scaleX(0.5)
+    }
+  }
+  @media screen and (min-resolution: 3dppx) {
+    &:after {
+      transform: scaleX(0.33);
+    }
+  }
+}
 
 @mixin border-none {
   &:after {
