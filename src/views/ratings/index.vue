@@ -1,43 +1,46 @@
 <template>
   <div class="rating-page">
-    <div class="seller-info">
-      <div class="score-info border-right-1px">
-        <div class="score">{{ seller.score }}</div>
-        <p class="sub-text">综合评分</p>
-        <p class="rating-rank-text">高于周边商家{{ seller.rankRate }}%</p>
+    <spin v-if="spinning"></spin>
+    <template v-else>
+      <div class="seller-info">
+        <div class="score-info border-right-1px">
+          <div class="score">{{ seller.score }}</div>
+          <p class="sub-text">综合评分</p>
+          <p class="rating-rank-text">高于周边商家{{ seller.rankRate }}%</p>
+        </div>
+        <section>
+          <div class="item">
+            <span class="text">服务态度</span>
+            <div class="star-wrapper">
+              <star :score="seller.score" size="medium"/>
+            </div>
+            <span class="score-text">{{ seller.score }}</span>
+          </div>
+          <div class="item" style="padding: 8px 0;">
+            <span class="text">商品评分</span>
+            <div class="star-wrapper">
+              <star :score="seller.foodScore" size="medium"/>
+            </div>
+            <span class="score-text">{{ seller.foodScore }}</span>
+          </div>
+          <div class="item">
+            <span class="text">送达时间</span>
+            <span class="delivery-time">{{ seller.deliveryTime }}分钟</span>
+          </div>
+        </section>
       </div>
-      <section>
-        <div class="item">
-          <span class="text">服务态度</span>
-          <div class="star-wrapper">
-            <star :score="seller.score" size="medium"/>
-          </div>
-          <span class="score-text">{{ seller.score }}</span>
-        </div>
-        <div class="item" style="padding: 8px 0;">
-          <span class="text">商品评分</span>
-          <div class="star-wrapper">
-            <star :score="seller.foodScore" size="medium"/>
-          </div>
-          <span class="score-text">{{ seller.foodScore }}</span>
-        </div>
-        <div class="item">
-          <span class="text">送达时间</span>
-          <span class="delivery-time">{{ seller.deliveryTime }}分钟</span>
-        </div>
-      </section>
-    </div>
-    <div class="block"></div>
-    <rating-select
-      :rating_list="rating_list"
-      :tabs="tabs"
-      :is_only_content_show="is_only_content_show"
-      :rating_type="rating_type"
-      @toggle="toggle"
-    />
-    <seller-rating-list
-      :rating_list="filter_rating_list"
-    />
+      <div class="block"></div>
+      <rating-select
+        :rating_list="rating_list"
+        :tabs="tabs"
+        :is_only_content_show="is_only_content_show"
+        :rating_type="rating_type"
+        @toggle="toggle"
+      />
+      <seller-rating-list
+        :rating_list="filter_rating_list"
+      />
+    </template>
   </div>
 </template>
 
@@ -51,6 +54,7 @@ import RatingSelect from '@/components/rating-select/index.vue'
 import type { RatingListProps } from '@/interface/rating-interface'
 import { RATING_ALL, RATING_POSITIVE, RATING_NEGATIVE, RATING_TYPE_NEGATIVE, RATING_TYPE_POSITIVE } from '@/constants'
 import SellerRatingList from '@/components/seller-rating-list/index.vue'
+import Spin from '@/components/spinning/index.vue'
 
 const store = useSellerStore()
 const { seller } = storeToRefs(store)
@@ -62,12 +66,15 @@ const tabs = {
 }
 const is_only_content_show = ref<boolean>(false)
 const rating_type = ref<string>(RATING_ALL)
+const spinning = ref<boolean>(true)
 
 const get_seller_ratings = () => {
   axios.get('/api/seller/ratings').then(res => {
     rating_list.value = res
   }).catch(() => {
     rating_list.value = []
+  }).finally(() => {
+    spinning.value = false
   })
 }
 const toggle = ({ type, payload }: { type: string; payload?: string }) => {

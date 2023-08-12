@@ -24,6 +24,32 @@
     }
   }
 }
+@mixin border-top-1px ($color) {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid $color;
+  }
+  @media screen and (min-resolution: 1.5dppx) {
+    &:before {
+      transform: scaleY(.7)
+    }
+  }
+  @media screen and (min-resolution: 2dppx) {
+    &:before {
+      transform: scaleY(0.5)
+    }
+  }
+  @media screen and (min-resolution: 3dppx) {
+    &:before {
+      transform: scaleY(0.33)
+    }
+  }
+}
 
 @mixin border-left-1px ($color) {
   position: relative;

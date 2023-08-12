@@ -1,70 +1,73 @@
 <template>
   <div class="goods-page">
-    <div class="menu-list">
-      <ul>
-        <li
-          v-for="(item, idx) in goods_list"
-          :key="item.name"
-          class="menu-item"
-          :class="{active: active_idx === idx }"
-          @click.stop="menu_jump(idx)"
-        >
-          <div
-            class="border-bottom-1px menu-box"
-            :class="{ 'border-none': active_idx === idx }"
+    <spin v-if="spinning"></spin>
+    <template v-else>
+      <div class="menu-list">
+        <ul>
+          <li
+            v-for="(item, idx) in goods_list"
+            :key="item.name"
+            class="menu-item"
+            :class="{active: active_idx === idx }"
+            @click.stop="menu_jump(idx)"
           >
-            <support-icon
-              class="menu-icon"
-              v-if="item.type > 0"
-              :level="3"
-              :type="support_type_class[item.type]"
-            ></support-icon>
-            <span class="menu-text">{{ item.name }}</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="goods-container" ref="container" @touchstart.stop="is_clicked">
-      <section>
-        <div
-          class="good-category"
-          v-for="good in goods_list"
-          :key="good.name"
-          ref="category_card"
-        >
-          <template v-if="good.foods && good.foods.length">
-            <div class="category-title">{{ good.name }}</div>
-            <div class="category-food-container">
-              <div
-                class="food-item border-bottom-1px"
-                v-for="(food, i) in good.foods"
-                :key="food.id"
-                :class="{ 'border-none': i === good.foods.length - 1 }"
-              >
-                <div class="food-img">
-                  <img :src="food.image" alt="" class="img">
-                </div>
-                <div class="food-info" @click.stop="get_food_detail(food)">
-                  <div class="food-title">{{ food.name }}</div>
-                  <div class="food-desc" v-if="food.description">{{ food.description }}</div>
-                  <div style="padding-top: 8px; line-height:10px;">
-                    <span class="sell-count">月售{{ food.sellCount }}份</span>
-                    <span class="rating-text">好评率{{ food.rating }}%</span>
+            <div
+              class="border-bottom-1px menu-box"
+              :class="{ 'border-none': active_idx === idx }"
+            >
+              <support-icon
+                class="menu-icon"
+                v-if="item.type > 0"
+                :level="3"
+                :type="support_type_class[item.type]"
+              ></support-icon>
+              <span class="menu-text">{{ item.name }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="goods-container" ref="container" @touchstart.stop="is_clicked">
+        <section>
+          <div
+            class="good-category"
+            v-for="good in goods_list"
+            :key="good.name"
+            ref="category_card"
+          >
+            <template v-if="good.foods && good.foods.length">
+              <div class="category-title">{{ good.name }}</div>
+              <div class="category-food-container">
+                <div
+                  class="food-item border-bottom-1px"
+                  v-for="(food, i) in good.foods"
+                  :key="food.id"
+                  :class="{ 'border-none': i === good.foods.length - 1 }"
+                >
+                  <div class="food-img">
+                    <img :src="food.image" alt="" class="img">
                   </div>
-                  <div class="price">
-                    <span class="new-price">{{ food.price }}</span>
-                    <span class="old-price" v-if="food.oldPrice">{{ food.oldPrice }}</span>
-                  </div>
-                  <div class="food-control-container">
-                    <food-control-button :food="food"/>
+                  <div class="food-info" @click.stop="get_food_detail(food)">
+                    <div class="food-title">{{ food.name }}</div>
+                    <div class="food-desc" v-if="food.description">{{ food.description }}</div>
+                    <div style="padding-top: 8px; line-height:10px;">
+                      <span class="sell-count">月售{{ food.sellCount }}份</span>
+                      <span class="rating-text">好评率{{ food.rating }}%</span>
+                    </div>
+                    <div class="price">
+                      <span class="new-price">{{ food.price }}</span>
+                      <span class="old-price" v-if="food.oldPrice">{{ food.oldPrice }}</span>
+                    </div>
+                    <div class="food-control-container">
+                      <food-control-button :food="food"/>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </div>
-      </section>
-    </div>
+            </template>
+          </div>
+        </section>
+      </div>
+    </template>
   </div>
   <transition name="slide">
     <template v-if="is_visible">
@@ -82,6 +85,7 @@ import { support_type_class } from '@/config'
 import BetterScroll from 'better-scroll'
 import FoodControlButton from '@/components/food-control-button/index.vue'
 import FoodDetail from './components/food-detail.vue'
+import Spin from '@/components/spinning/index.vue'
 
 const goods_list = ref<GoodsListProps[]>([])
 const spinning = ref<boolean>(true)

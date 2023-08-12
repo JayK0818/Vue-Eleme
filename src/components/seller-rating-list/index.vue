@@ -24,7 +24,13 @@
               :class="[rating.rateType === 0 ? 'icon-thumb_up' : 'icon-thumb_down', rating.rateType === 0 ? 'active' : '']"
             ></i>
             <template v-if="rating.recommend && rating.recommend.length">
-              <span class="recommend-food" v-for="f in rating.recommend" :key="f">{{ f }}</span>
+              <div
+                class="recommend-food border-top-1px border-bottom-1px"
+                v-for="f in rating.recommend"
+                :key="f"
+              >
+                <div class="border-right-1px border-left-1px" style="padding:0 6px;">{{ f }}</div>
+              </div>
             </template>
           </div>
         </div>
@@ -105,16 +111,15 @@ defineProps({
       display: inline-block;
       box-sizing: border-box;
       margin-left: 8px;
-      padding: 0 6px;
       width: 62px;
       height: 15px;
       font-size: 9px;
       line-height: 15px;
       white-space: nowrap;
+      text-align: center;
       overflow: hidden;
       text-overflow: ellipsis;
       color: rgb(147, 153, 159);
-      border: 1px solid rgba(7, 17, 27, .1);
     }
   }
 }

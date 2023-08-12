@@ -1,12 +1,14 @@
 @import './reset.scss';
 @import './font.scss';
 @import './border.scss';
-
+.border-top-1px {
+  @include border-top-1px(rgba(7, 17, 27, .1));
+}
 .border-bottom-1px {
   @include border-bottom-1px(rgba(7, 17, 27, .1));
 }
 .border-left-1px {
-  @include border-left-1px(#2c343d);
+  @include border-left-1px(rgba(7, 17, 27, .1));
 }
 .border-right-1px {
   @include border-right-1px(rgba(7, 17, 27, .1));
