@@ -35,13 +35,19 @@ import {
 } from '@/constants/index'
 import type { RatingListProps } from '@/interface/goods-interface'
 
+type TabConfigType = {
+  [RATING_ALL]: string
+  [RATING_NEGATIVE]: string
+  [RATING_POSITIVE]: string
+}
+
 const props = defineProps({
   is_show_title: {
     type: Boolean,
     default: false
   },
   tabs: {
-    type: Object as PropType<{ [key: string]: string}>,
+    type: Object as PropType<TabConfigType>,
     default () {
       return {
         [RATING_ALL]: '全部',

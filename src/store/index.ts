@@ -35,7 +35,7 @@ const useShoppingCarStore = defineStore('shopping-car', {
         this.food_list[good_idx].count += 1
       }
     },
-    decrement (payload: ShoppingCarGoodsListProps) {
+    decrement (payload: FoodListProps) {
       const good_idx = this.food_list.findIndex(food => food.id === payload.id)
       if (good_idx === -1) return
       this.food_list[good_idx].count -= 1

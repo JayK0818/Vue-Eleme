@@ -39,7 +39,7 @@
       @toggle="toggle"
     />
     <food-rating-list
-      :rating_list="food.ratings"
+      :rating_list="rating_list"
       :is_only_content_show="is_only_content_show"
       :rating_type="rating_type"
     />
@@ -47,19 +47,20 @@
 </template>
 
 <script lang="ts" setup>
-import type { FoodListProps } from '@/interface/goods-interface'
-import { PropType, ref } from 'vue'
+import type { FoodListProps, RatingListProps } from '@/interface/goods-interface'
+import { PropType, ref, onMounted } from 'vue'
 import { useShoppingCarStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import FoodControlButton from '@/components/food-control-button/index.vue'
 import FoodRatingList from '@/components/food-rating-list/index.vue'
 import bus from '@/utils/bus'
 import RatingSelect from '@/components/rating-select/index.vue'
-import { RATING_ALL } from '@/constants/index'
+import { RATING_ALL, RATING_POSITIVE, RATING_TYPE_POSITIVE, RATING_NEGATIVE, RATING_TYPE_NEGATIVE } from '@/constants/index'
 
 const props = defineProps({
   food: {
-    type: Object as PropType<FoodListProps>
+    type: Object as PropType<FoodListProps>,
+    required: true
   }
 })
 const emit = defineEmits(['cancel'])
@@ -67,8 +68,9 @@ const cancel = ():void => emit('cancel')
 
 const store = useShoppingCarStore()
 const { food_id_count_map } = storeToRefs(store)
+const rating_list = ref<RatingListProps[]>([])
 
-const add_good = (event):void => {
+const add_good = (event: Event):void => {
   store.increment(props.food)
   bus.emit('update', event.target)
 }
@@ -81,11 +83,29 @@ const toggle = ({ type, payload }: { type: string; payload?: string }):void => {
       is_only_content_show.value = !is_only_content_show.value
       break
     case 'rating_type':
-      rating_type.value = payload
+      rating_type.value = payload as string
       break
   }
+  // 对评价内容进行筛选
+  let list = props.food.ratings || []
+  if (is_only_content_show.value) {
+    list = list.filter(item => item.text)
+  }
+  switch (rating_type.value) {
+    case RATING_ALL:
+      break
+    case RATING_POSITIVE:
+      list = list.filter(item => item.rateType === RATING_TYPE_POSITIVE)
+      break
+    case RATING_NEGATIVE:
+      list = list.filter(item => item.rateType === RATING_TYPE_NEGATIVE)
+      break
+  }
+  rating_list.value = list
 }
-
+onMounted(() => {
+  rating_list.value = props.food.ratings
+})
 </script>
 
 <style lang="scss" scoped>

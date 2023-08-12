@@ -32,7 +32,7 @@ const store = useShoppingCarStore()
 
 const { food_id_count_map } = storeToRefs(store)
 
-const add_food = (event):void => {
+const add_food = (event: Event):void => {
   bus.emit('update', event.target)
   nextTick(() => {
     store.increment(props.food)

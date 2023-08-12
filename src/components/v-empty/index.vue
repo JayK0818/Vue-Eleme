@@ -19,7 +19,9 @@ defineProps({
   padding: 16px 0;
   text-align: center;
   .text {
+    margin-top: 4px;
     color: rgba(0, 0, 0, .45);
+    font-size: 12px;
   }
 }
 </style>
