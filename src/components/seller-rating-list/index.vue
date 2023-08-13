@@ -9,6 +9,7 @@
         <div class="avatar">
           <img :src="rating.avatar" class="img"/>
         </div>
+        <div class="rate-time">{{ format_timestamp(rating.rateTime) }}</div>
         <div class="rating-content">
           <div class="username">{{ rating.username }}</div>
           <div class="score-delivery-item">
@@ -43,6 +44,7 @@
 import type { RatingListProps } from '@/interface/rating-interface'
 import { PropType } from 'vue'
 import Star from '@/components/star/index.vue'
+import { format_timestamp } from '@/utils/date'
 
 defineProps({
   rating_list: {
@@ -68,6 +70,13 @@ defineProps({
         max-width: 100%;
         max-height: 100%;
       }
+    }
+    .rate-time {
+      position: absolute;
+      right: 0;
+      font-size: 10px;
+      color: rgb(147, 153, 159);
+      line-height: 12px;
     }
   }
   .rating-content {
@@ -100,9 +109,11 @@ defineProps({
   .recommend-item {
     padding-top: 8px;
     .rating-icon {
+      margin-right: 8px;
       font-size: 12px;
       line-height: 16px;
       color: rgb(183, 187, 191);
+      vertical-align: 2px;
       &.active {
         color: rgb(0, 160, 220);
       }
@@ -110,16 +121,18 @@ defineProps({
     .recommend-food {
       display: inline-block;
       box-sizing: border-box;
-      margin-left: 8px;
+      margin-right: 8px;
       width: 62px;
       height: 15px;
       font-size: 9px;
       line-height: 15px;
-      white-space: nowrap;
-      text-align: center;
-      overflow: hidden;
-      text-overflow: ellipsis;
       color: rgb(147, 153, 159);
+      div {
+        white-space: nowrap;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
