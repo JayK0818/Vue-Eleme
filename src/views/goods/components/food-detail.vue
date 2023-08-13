@@ -105,6 +105,7 @@ onMounted(() => {
   bottom: 48px;
   background-color: #fff;
   overflow: auto;
+  z-index: 100;
   .sub-title {
     font-size: 14px;
     color: #212121;

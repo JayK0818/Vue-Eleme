@@ -50,7 +50,7 @@ const useShoppingCarStore = defineStore('shopping-car', {
   getters: {
     price_total: (state) => state.food_list.reduce((p, n) => p + n.count * n.price, 0),
     count_total: (state) => state.food_list.reduce((p, n) => p + n.count, 0),
-    food_id_count_map: (state) => {
+    food_id_count_map: (state) => { // 当前商品加购的数量
       const map: {[key: number]: number} = {}
       state.food_list.forEach(item => {
         map[item.id] = item.count

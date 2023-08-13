@@ -64,7 +64,9 @@
   </div>
   <!-- 购物车详情背景 -->
   <transition name="fade">
-    <template v-if="is_visible"><div class="food-list-detail-mask"></div></template>
+    <template v-if="is_visible">
+      <div class="food-list-detail-mask" @click.stop="is_fold = true"></div>
+    </template>
   </transition>
 </template>
 
@@ -85,8 +87,8 @@ const delivery_min_price = computed(() => {
   return seller.value.minPrice
 })
 
-const ball_list = ref<{ visible: boolean }>([])
-const drop_balls = ref<HTMLElement[]>([])
+const ball_list = ref<{ visible: boolean; el?: HTMLElement }[]>([])
+const drop_balls = ref<{ visible: boolean; el?: HTMLElement }[]>([])
 const is_fold = ref<boolean>(true)
 /**
  * @description 购物车详情是否显示
@@ -125,27 +127,28 @@ onMounted(() => {
     }
   })
 })
-
+// @ts-ignore
 const before_enter = (el):void => {
   const ball = drop_balls.value[drop_balls.value.length - 1]
-  const { left, top } = ball.el.getBoundingClientRect()
+  const { left, top } = (ball.el as HTMLElement).getBoundingClientRect()
   const x = left - 30
   const y = -(window.innerHeight - top - 32)
   el.style.display = ''
   el.style.transform = el.style.webkitTransform = `translate3d(0, ${y}px, 0)`
   const inner = el.querySelector('.inner')
-  inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
+  if (!inner) return
+  (inner as HTMLElement).style.transform = (inner as HTMLElement).style.webkitTransform = `translate3d(${x}px, 0, 0)`
 }
-
+// @ts-ignore
 const enter = (el, done):void => {
   // eslint-disable-next-line
   const h = el.offsetHeight
   el.style.transform = el.style.webkitTransform = 'translate3d(0, 0, 0)'
-  const inner = el.querySelector('.inner')
-  inner.style.transform = inner.style.webkitTransform = 'translate3d(0, 0, 0)'
+  const inner = el.querySelector('.inner');
+  (inner as HTMLElement).style.transform = (inner as HTMLElement).style.webkitTransform = 'translate3d(0, 0, 0)'
   el.addEventListener('transitionend', done)
 }
-
+// @ts-ignore
 const after_enter = (el):void => {
   const ball = drop_balls.value.shift()
   if (ball) {
@@ -286,6 +289,6 @@ onBeforeUnmount(() => {
   bottom: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, .65);
-  z-index: 1;
+  z-index: 5;
 }
 </style>

@@ -22,6 +22,10 @@
                 :type="support_type_class[item.type]"
               ></support-icon>
               <span class="menu-text">{{ item.name }}</span>
+              <div
+                class="category-count"
+                v-if="food_category_count_map[item.name]"
+              >{{ food_category_count_map[item.name] > 99 ? '99+' : food_category_count_map[item.name] }}</div>
             </div>
           </li>
         </ul>
@@ -78,14 +82,16 @@
 
 <script lang="ts" setup>
 import axios from '@/api'
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, computed } from 'vue'
 import SupportIcon from '@/components/support-icon/index.vue'
 import type { GoodsListProps, FoodListProps } from '@/interface/goods-interface'
 import { support_type_class } from '@/config'
 import BetterScroll from 'better-scroll'
 import FoodControlButton from '@/components/food-control-button/index.vue'
 import FoodDetail from './components/food-detail.vue'
+import { useShoppingCarStore } from '@/store/index'
 import Spin from '@/components/spinning/index.vue'
+import { storeToRefs } from 'pinia'
 
 const goods_list = ref<GoodsListProps[]>([])
 const spinning = ref<boolean>(true)
@@ -97,6 +103,10 @@ const scroll_instance = ref<null | any>(null)
 const is_click_menu = ref<boolean>(false)
 const active_food = ref<FoodListProps | any>({})
 const is_visible = ref<boolean>(false)
+
+// store
+const store = useShoppingCarStore()
+const { food_id_count_map } = storeToRefs(store)
 
 const get_goods_list = () => {
   spinning.value = true
@@ -171,6 +181,23 @@ const get_food_detail = (food: FoodListProps):void => {
     is_visible.value = true
   })
 }
+/**
+ * @description 品类下的商品数量
+*/
+const food_category_count_map = computed(() => {
+  const map: {[key: string]: number} = {}
+  goods_list.value.forEach(category => {
+    if (!map[category.name]) {
+      map[category.name] = 0
+    }
+    category.foods.forEach(food => {
+      if (food_id_count_map.value[food.id]) {
+        map[category.name] += food_id_count_map.value[food.id]
+      }
+    })
+  })
+  return map
+})
 </script>
 
 <style lang="scss" scoped>
@@ -185,12 +212,28 @@ const get_food_detail = (food: FoodListProps):void => {
     background-color: #f3f5f7;
     overflow: auto;
     .menu-item {
+      position: relative;
       padding: 0 12px;
       &.active {
         background-color: #fff;
       }
       .menu-box {
+        position: relative;
         padding: 13px 0;
+        .category-count {
+          position: absolute;
+          right: -4px;
+          top: 0;
+          width: 24px;
+          font-size: 10px;
+          height: 14px;
+          line-height: 14px;
+          text-align: center;
+          border-radius: 6px;
+          z-index: 2;
+          background-color: rgb(240, 20, 20);
+          color: #fff;
+        }
       }
       .menu-text {
         padding-left: 2px;

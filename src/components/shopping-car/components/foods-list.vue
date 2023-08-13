@@ -47,7 +47,7 @@ const clear = ():void => {
   width: 100%;
   background-color: #fff;
   overflow: hidden;
-  z-index: 2;
+  z-index: 4;
   .header {
     padding: 0 18px;
     height: 40px;

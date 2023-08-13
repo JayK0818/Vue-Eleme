@@ -99,7 +99,6 @@ const seller = ref<SellerDetailProps | any>({})
 
 onMounted(() => {
   get_seller_detail().then(res => {
-    console.log(res)
     seller.value = res
   }).catch(() => {
     seller.value = {}
