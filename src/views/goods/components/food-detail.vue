@@ -39,7 +39,7 @@
       @toggle="toggle"
     />
     <food-rating-list
-      :rating_list="rating_list"
+      :rating_list="filter_rating_list"
       :is_only_content_show="is_only_content_show"
       :rating_type="rating_type"
     />
@@ -55,7 +55,8 @@ import FoodControlButton from '@/components/food-control-button/index.vue'
 import FoodRatingList from '@/components/food-rating-list/index.vue'
 import bus from '@/utils/bus'
 import RatingSelect from '@/components/rating-select/index.vue'
-import { RATING_ALL, RATING_POSITIVE, RATING_TYPE_POSITIVE, RATING_NEGATIVE, RATING_TYPE_NEGATIVE } from '@/constants/index'
+import { RATING_ALL } from '@/constants/index'
+import { useFilterRating } from '@/hooks'
 
 const props = defineProps({
   food: {
@@ -86,23 +87,9 @@ const toggle = ({ type, payload }: { type: string; payload?: string }):void => {
       rating_type.value = payload as string
       break
   }
-  // 对评价内容进行筛选
-  let list = props.food.ratings || []
-  if (is_only_content_show.value) {
-    list = list.filter(item => item.text)
-  }
-  switch (rating_type.value) {
-    case RATING_ALL:
-      break
-    case RATING_POSITIVE:
-      list = list.filter(item => item.rateType === RATING_TYPE_POSITIVE)
-      break
-    case RATING_NEGATIVE:
-      list = list.filter(item => item.rateType === RATING_TYPE_NEGATIVE)
-      break
-  }
-  rating_list.value = list
 }
+const filter_rating_list = useFilterRating<RatingListProps>(rating_list, is_only_content_show, rating_type)
+
 onMounted(() => {
   rating_list.value = props.food.ratings
 })

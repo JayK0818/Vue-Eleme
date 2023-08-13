@@ -46,15 +46,16 @@
 
 <script lang="ts" setup>
 import axios from '@/api'
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useSellerStore } from '@/store'
 import { storeToRefs } from 'pinia'
 import Star from '@/components/star/index.vue'
 import RatingSelect from '@/components/rating-select/index.vue'
 import type { RatingListProps } from '@/interface/rating-interface'
-import { RATING_ALL, RATING_POSITIVE, RATING_NEGATIVE, RATING_TYPE_NEGATIVE, RATING_TYPE_POSITIVE } from '@/constants'
+import { RATING_ALL, RATING_POSITIVE, RATING_NEGATIVE } from '@/constants'
 import SellerRatingList from '@/components/seller-rating-list/index.vue'
 import Spin from '@/components/spinning/index.vue'
+import { useFilterRating } from '@/hooks'
 
 const store = useSellerStore()
 const { seller } = storeToRefs(store)
@@ -87,20 +88,7 @@ const toggle = ({ type, payload }: { type: string; payload?: string }) => {
       break
   }
 }
-const filter_rating_list = computed<RatingListProps[]>(() => {
-  let list = rating_list.value.slice()
-  if (is_only_content_show.value) {
-    list = list.filter(item => item.text)
-  }
-  switch (rating_type.value) {
-    case RATING_POSITIVE:
-      list = list.filter(item => item.rateType === RATING_TYPE_POSITIVE)
-      break
-    case RATING_NEGATIVE:
-      list = list.filter(item => item.rateType === RATING_TYPE_NEGATIVE)
-  }
-  return list
-})
+const filter_rating_list = useFilterRating<RatingListProps>(rating_list, is_only_content_show, rating_type)
 
 onMounted(() => {
   get_seller_ratings()
