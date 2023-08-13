@@ -48,7 +48,7 @@
                   :class="{ 'border-none': i === good.foods.length - 1 }"
                 >
                   <div class="food-img">
-                    <img :src="food.image" alt="" class="img">
+                    <img v-lazy="food.image" alt="" class="img">
                   </div>
                   <div class="food-info" @click.stop="get_food_detail(food)">
                     <div class="food-title">{{ food.name }}</div>
