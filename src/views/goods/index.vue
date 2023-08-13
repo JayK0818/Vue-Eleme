@@ -106,26 +106,26 @@ const get_goods_list = () => {
     goods_list.value = []
   }).finally(() => {
     spinning.value = false
-    _init_scroll()
-    height_list.value = _get_category_title_height()
+    nextTick(() => {
+      _init_scroll()
+      height_list.value = _get_category_title_height()
+    })
   })
 }
 onMounted(() => {
   get_goods_list()
 })
 const _init_scroll = ():void => {
-  nextTick(() => {
-    // eslint-disable-next-line
-    const bs_instance = new BetterScroll(container.value as HTMLElement, {
-      probeType: 3,
-      click: true
-    })
-    scroll_instance.value = bs_instance
-    // 监听better-scroll的滚动事件
-    bs_instance.on('scroll', ({ y }: { y: number }) => {
-      if (is_click_menu.value) return
-      calc_menu_idx(Math.abs(y))
-    })
+  // eslint-disable-next-line
+  const bs_instance = new BetterScroll(container.value as HTMLElement, {
+    probeType: 3,
+    click: true
+  })
+  scroll_instance.value = bs_instance
+  // 监听better-scroll的滚动事件
+  bs_instance.on('scroll', ({ y }: { y: number }) => {
+    if (is_click_menu.value) return
+    calc_menu_idx(Math.abs(y))
   })
 }
 const _get_category_title_height = ():number[] => {
