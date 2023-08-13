@@ -16,7 +16,11 @@
     </router-link>
   </div>
   <div class="content">
-    <router-view/>
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component"/>
+      </keep-alive>
+    </router-view>
   </div>
   <!-- 购物车 -->
   <shopping-car/>

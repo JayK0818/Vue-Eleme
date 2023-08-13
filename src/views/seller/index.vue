@@ -13,6 +13,7 @@
         </section>
         <div class="favorite-wrapper">
           <i class="icon-favorite"></i>
+          <div class="favorite-text">收藏</div>
         </div>
       </div>
       <div class="main">
@@ -131,12 +132,21 @@ onMounted(() => {
         line-height: 18px;
       }
       .favorite-wrapper {
-        width: 30px;
+        width: 40px;
         text-align: center;
         .icon-favorite {
           font-size: 24px;
-          color: rgb(240, 20, 20);
           line-height: 24px;
+          color: #d4d6d9;
+          &.active {
+            color: rgb(240, 20, 20);
+          }
+        }
+        .favorite-text {
+          margin-top: 4px;
+          font-size: 10px;
+          color: rgb(77, 85, 93);
+          line-height: 10px;
         }
       }
     }
